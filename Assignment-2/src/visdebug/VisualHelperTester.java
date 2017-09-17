@@ -1,3 +1,4 @@
+package visdebug;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ public class VisualHelperTester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
 		
 		// Create list of points
 		ArrayList<Point2D> points = new ArrayList<Point2D>();
