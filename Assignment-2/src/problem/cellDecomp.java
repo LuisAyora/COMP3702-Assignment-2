@@ -42,7 +42,7 @@ public class cellDecomp {
 							}
 						}
 					}
-					if (transcient.getX()<=1 && !pointsVertSweep.contains(transcient)) {
+					if (transcient.getX()<=1 && !pointsVertSweep.contains(transcient) && !isPointColliding(obstacles,transcient)) {
 						pointsVertSweep.add(transcient);
 					}
 				}
@@ -80,7 +80,7 @@ public class cellDecomp {
 							}
 						}
 					}
-					if (transcient.getX()<=1 && !pointsHoriSweep.contains(transcient)) {
+					if (transcient.getX()<=1 && !pointsHoriSweep.contains(transcient)&& !isPointColliding(obstacles,transcient)) {
 						pointsHoriSweep.add(transcient);
 					}
 				}
@@ -93,12 +93,20 @@ public class cellDecomp {
 		return pointsVertSweep;
 	}
 	
-	
+	private static Boolean isPointColliding(List<Obstacle> obstacles,Point2D point) {
+		for (Obstacle obs:obstacles) {
+			//if (obs.getRect().contains(point.getX(), point.getY())) {
+			if (obs.getRect().intersectsLine(point.getX(), point.getY(),point.getX(), point.getY())) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	
 	public static void main(String[] args) throws IOException {
 		ProblemSpec problem=new ProblemSpec();
-		String address="testcases\\3ASV-easy.txt";
+		String address="testcases\\3ASV.txt";
 		problem.loadProblem(address);
 		
 		List<Point2D> thePoints=getPoints(problem.getObstacles());
