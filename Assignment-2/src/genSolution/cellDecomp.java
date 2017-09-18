@@ -1,8 +1,10 @@
-package problem;
-import java.io.IOException;
+package genSolution;
 import java.awt.geom.Point2D;
-import java.util.List;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import problem.*;
+
 public class cellDecomp {
 	
 	public static List<Point2D> getPoints(List<Obstacle> obstacles){
@@ -118,5 +120,4 @@ public class cellDecomp {
 		}
 		
 	}	
-	
 }
