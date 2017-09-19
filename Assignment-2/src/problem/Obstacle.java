@@ -1,6 +1,5 @@
 package problem;
 
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +14,7 @@ import java.util.Scanner;
 public class Obstacle {
 	/** Stores the obstacle as a Rectangle2D */
 	private Rectangle2D rect;
-	private List<Point2D> pathPoints=new ArrayList<Point2D>();
+
 	/**
 	 * Constructs an obstacle with the given (x,y) coordinates of the
 	 * bottom-left corner, as well as the width and height.
@@ -31,11 +30,6 @@ public class Obstacle {
 	 */
 	public Obstacle(double x, double y, double w, double h) {
 		this.rect = new Rectangle2D.Double(x, y, w, h);
-		this.pathPoints.add(new Point2D.Double(x,y));
-		this.pathPoints.add(new Point2D.Double(x+w,y));
-		this.pathPoints.add(new Point2D.Double(x+w,y+h));
-		this.pathPoints.add(new Point2D.Double(x,y+h));
-		
 	}
 
 	/**
@@ -57,13 +51,7 @@ public class Obstacle {
 		double xMax = Collections.max(xs);
 		double yMin = Collections.min(ys);
 		double yMax = Collections.max(ys);
-		this.rect = new Rectangle2D.Double(xMin, yMin, xMax - xMin, yMax - yMin);		
-
-
-		this.pathPoints.add(new Point2D.Double(xMin,yMin));
-		this.pathPoints.add(new Point2D.Double(xMax,yMin));
-		this.pathPoints.add(new Point2D.Double(xMax,yMax));
-		this.pathPoints.add(new Point2D.Double(xMin,yMax));
+		this.rect = new Rectangle2D.Double(xMin, yMin, xMax - xMin, yMax - yMin);
 		s.close();
 	}
 
@@ -84,9 +72,4 @@ public class Obstacle {
 	public String toString() {
 		return rect.toString();
 	}
-	
-	public List<Point2D> getPoints(){
-		return pathPoints;
-	}
-	
 }
