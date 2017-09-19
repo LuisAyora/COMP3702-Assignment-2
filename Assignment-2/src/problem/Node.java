@@ -1,6 +1,6 @@
 package problem;
 
-import java.awt.List;
+
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -37,6 +37,14 @@ public class Node {
 	 */
 	public Point2D getLocation() {
 		return location;
+	}
+	
+	/**
+	 * Return the theta angles
+	 * @return ArrayList<Double> theta
+	 */
+	public ArrayList<Double> getTheta(){
+		return theta;
 	}
 	
 	@Override
