@@ -2,7 +2,6 @@ package problem;
 
 import java.awt.geom.Point2D;
 import java.util.*;
-import java.io.*;
 
 /**
  * 
@@ -97,9 +96,9 @@ public class ASVAngle {
 		ArrayList<Double> angles = new ArrayList<Double>();
 		for(int i = 0; i < alpha.size(); i++) {
 			if(i == 0)
-				angles.add(alpha.get(i));
+				angles.add(alpha.get(i)/180);
 			else
-				angles.add((alpha.get(i) - alpha.get(i - 1)) % 360);
+				angles.add(((alpha.get(i) - alpha.get(i - 1)) % 360)/180);
 		}
 		return angles;
 	}

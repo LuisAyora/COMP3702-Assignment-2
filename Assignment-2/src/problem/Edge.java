@@ -1,6 +1,5 @@
 package problem;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +19,7 @@ public class Edge {
 	public Edge(Node init, Node end) {
 		this.init = init;
 		this.end = end;
-		weight = manhattanMetric(init.getLocation(), end.getLocation());
+		weight = manhattanMetric(init, end);
 	}
 	
 	// Queries
@@ -51,10 +50,15 @@ public class Edge {
 	
 	//Helping functions
 	
-	private double manhattanMetric(Point2D start, Point2D end) {
-		return Math.abs(((start.getX() - end.getX() + 
-				(start.getY() - end.getY()))));
+	private double manhattanMetric(Node start, Node end) {
+		double distance = Math.abs(((start.getLocation().getX() - end.getLocation().getX() + 
+				Math.abs(start.getLocation().getY() - end.getLocation().getY()))));
+		for (int i=0;i<start.getTheta().size();i++) {
+			distance+=Math.abs(start.getTheta().get(i)-end.getTheta().get(i));
+		}
+		return distance;
 	}
+	
 	
 	@Override
 	/**
