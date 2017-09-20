@@ -47,7 +47,11 @@ public class ASVConfig {
 		}
 		s.close();
 	}
-
+	
+	public ASVConfig(List<Point2D> points) {
+		this.asvPositions=points;
+	}
+	
 	/**
 	 * Copy constructor.
 	 *

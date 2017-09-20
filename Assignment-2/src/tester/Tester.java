@@ -299,7 +299,7 @@ public class Tester {
 	 * Normalises an angle to the range (-pi, pi]
 	 *
 	 * @param angle
-	 *            the angle to normalise.
+	 *            the angle to normalise
 	 * @return the normalised angle.
 	 */
 	public double normaliseAngle(double angle) {

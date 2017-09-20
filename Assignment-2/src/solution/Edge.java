@@ -1,4 +1,4 @@
-package problem;
+package solution;
 
 import java.util.ArrayList;
 
@@ -48,15 +48,32 @@ public class Edge {
 		return weight;
 	}
 	
+	
+
+	
 	//Helping functions
 	
 	private double manhattanMetric(Node start, Node end) {
 		double distance = Math.abs(((start.getLocation().getX() - end.getLocation().getX() + 
 				Math.abs(start.getLocation().getY() - end.getLocation().getY()))));
 		for (int i=0;i<start.getTheta().size();i++) {
-			distance+=Math.abs(start.getTheta().get(i)-end.getTheta().get(i));
+			double thetaStart=start.getTheta().get(i);
+			double thetaEnd=end.getTheta().get(i);
+			distance+=Math.abs(angularDif(thetaStart,thetaEnd));
 		}
 		return distance;
+	}
+	
+	/**
+	 * Takes the angular difference of normalised angles
+	 * @param a first angle
+	 * @param b second angle
+	 * @return returns a-b noting circularity of angles
+	 */
+	private double angularDif(double a,double b) {
+		double a1=(a+2)%2;
+		double b1=(b+2)%2;
+		return a1-b1;
 	}
 	
 	
@@ -65,15 +82,15 @@ public class Edge {
 	 * String representation of the Edge object
 	 */
 	public String toString() {
-		return init.getName() + " " + end.getName()
-		+ " - " + Double.toString(weight);
+		return "Initial: " + init.toString() + "\n Final: " + end.toString()
+		+ "\n Weight:" + Double.toString(weight);
 	}
 	
 	// Dummy test method - Delete this!!!
 	public static void main(String[] args) {
 		//Create test objects
-		Node n1 = new Node("n1", 0, 0,new ArrayList<Double>());
-		Node n2 = new Node("n2", 3, 4,new ArrayList<Double>());
+		Node n1 = new Node( 0, 0,new ArrayList<Double>());
+		Node n2 = new Node( 3, 4,new ArrayList<Double>());
 		Edge e1 = new Edge(n1, n2);
 		
 		System.out.println(Double.toString(e1.getWeight()));

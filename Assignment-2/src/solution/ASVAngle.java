@@ -1,7 +1,9 @@
-package problem;
+package solution;
 
 import java.awt.geom.Point2D;
 import java.util.*;
+
+import problem.ASVConfig;
 
 /**
  * 
@@ -87,7 +89,7 @@ public class ASVAngle {
 		return angles;
 	}
 	
-	/**
+	/**hjm[nb[                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 	 * Calculate the values of the theta angles of the ASVs
 	 * @param alpha
 	 * @return ArrayList<Double>
