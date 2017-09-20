@@ -64,28 +64,7 @@ public class Node {
 	 * @param end second node
 	 * @return Node
 	 */
-	public Node middleNode(Node end) {
-		Point2D middlePoint=
-				new Point2D.Double((this.getLocation().getX()+end.getLocation().getX())/2,
-						(this.getLocation().getY()+end.getLocation().getY())/2);
-		ArrayList<Double> angles=new ArrayList<Double>();
-		for (int i=0;i<this.getTheta().size();i++) {
-			//Accounts for circularity of angles when they have different sign
-			if (this.getTheta().get(i)*end.getTheta().get(i)<0) {
-				double middle=((this.getTheta().get(i)+2)%2+(end.getTheta().get(i)+2)%2)/2;
-				if (middle>1) {
-					middle-=1;
-				}
-				angles.add(middle);
-			}else {
-				angles.add((this.getTheta().get(i)+end.getTheta().get(i))/2);
-			}
-			
-		}
-		return new Node(middlePoint.getX(),middlePoint.getY(),angles);
-		
-	}
-	
+
 	//Help functions
 	/**
 	 * Obtains ASVs coords given state
@@ -102,8 +81,8 @@ public class Node {
 		
 		for (int i=0;i<angles.size();i++) {
 			psi+=angles.get(i);
-			double deltaX=broomLength*Math.cos(Math.PI*psi);
-			double deltaY=broomLength*Math.sin(Math.PI*psi);
+			double deltaX=broomLength*Math.cos(Math.PI*psi/180);
+			double deltaY=broomLength*Math.sin(Math.PI*psi/180);
 			Point2D nextPoint=new Point2D.Double(asvs.get(i).getX()+deltaX,asvs.get(i).getY()+deltaY);
 			asvs.add(nextPoint);
 		}

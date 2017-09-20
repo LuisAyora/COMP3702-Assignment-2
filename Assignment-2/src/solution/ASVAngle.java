@@ -97,10 +97,20 @@ public class ASVAngle {
 	private ArrayList<Double> calculateThetaAngles(ArrayList<Double> alpha) {
 		ArrayList<Double> angles = new ArrayList<Double>();
 		for(int i = 0; i < alpha.size(); i++) {
-			if(i == 0)
-				angles.add(alpha.get(i)/180);
-			else
-				angles.add(((alpha.get(i) - alpha.get(i - 1)) % 360)/180);
+			if(i == 0) {
+				if (alpha.get(i)>=0) {
+					angles.add(alpha.get(i));
+				}else {
+					angles.add(alpha.get(i)+360);
+				}	
+			}else {
+				Double toAdd=((alpha.get(i) - alpha.get(i - 1)) % 360);
+				if (toAdd>=0) {
+					angles.add(toAdd);
+				}else {
+					angles.add(toAdd+360);
+				}
+			}
 		}
 		return angles;
 	}
@@ -121,6 +131,13 @@ public class ASVAngle {
 		System.out.println(angles.getAlphaAngles());
 		System.out.println(angles.getThetaAngles());
 		
+		
+		Node a=new Node(config.getASVPositions().get(0).getX(),config.getASVPositions().get(0).getY(),
+				angles.getThetaAngles());
+		
+		System.out.println("Output: ");
+		System.out.println(a.getConfigCoords().toString());
+		
 		// Test the commands - Should I merge both into the one command?
 		angles.updateStatus(new ASVConfig(7, 
 				"0.893301 0.238602 0.85 0.213602 0.825 0.170301 0.850 "
@@ -130,5 +147,7 @@ public class ASVAngle {
 		System.out.println(angles.getConfig().toString());
 		System.out.println(angles.getAlphaAngles());
 		System.out.println(angles.getThetaAngles());
+		
+		
 	}
 }

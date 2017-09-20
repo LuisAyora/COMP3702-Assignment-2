@@ -19,6 +19,9 @@ public class collisionDetect {
 	 * @param obstacles workspace obstacles
 	 * @return boolean
 	 */
+	
+	
+	
 	public static boolean isPathColliding(Edge edge,List<Obstacle> obstacles) {
 		Node middle=edge.getInit().middleNode(edge.getEnd());
 		if (test.hasCollision(middle.getConfigCoords(), obstacles)) {
