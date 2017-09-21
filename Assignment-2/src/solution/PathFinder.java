@@ -21,6 +21,11 @@ public class PathFinder {
 		//theQueue=new PriorityQueue();
 	}
 	
+	/**
+	 * Obtains a random Node taking in count the convexity direction
+	 * @param node
+	 * @return Node
+	 */
 	private Node randomNode(Node node) {
 		ArrayList<Double> angles=new ArrayList<Double>();
 		boolean convexity=nodeConvexity(node);
@@ -36,15 +41,45 @@ public class PathFinder {
 		return (new Node(x,y,angles));
 	}
 	
+	/**
+	 * Obtains random Node from a Gaussian Distribution
+	 * of mean the given points and variance given
+	 * @param node
+	 * @param variance
+	 * @return
+	 */
 	private Node randomGaussianNode(Node node,double variance) {
 		ArrayList<Double> angles=new ArrayList<Double>();
 		boolean convexity = nodeConvexity(node);
-		//double x = numGenerator.nextGaussian()+;
+		
+		double x = numGenerator.nextGaussian()*variance+node.getLocation().getX();
+		double y = numGenerator.nextGaussian()*variance+node.getLocation().getY();
+		double angleToAdd=((numGenerator.nextGaussian()*variance+node.getTheta().get(0)/360)*360)%360;
+		if (angleToAdd<0)
+			angleToAdd+=360;
+		angles.add(angleToAdd);
+		for (int i=1;i<node.getTheta().size();i++) {
+			if (convexity) {
+				angleToAdd=(numGenerator.nextGaussian()*variance+node.getTheta().get(i)/180)*180;
+				if (angleToAdd>180)
+					angleToAdd=180;
+				if (angleToAdd<0)
+					angleToAdd=0;
+			}else {
+				angleToAdd=(numGenerator.nextGaussian()*variance+(node.getTheta().get(i)-180)/180)*180+180;
+				if (angleToAdd>360)
+					angleToAdd=359;
+				if (angleToAdd<180)
+					angleToAdd=181;
+			}
+			angles.add(angleToAdd);
+		}
+		return (new Node(x,y,angles));
 	}
 	
 	/**
 	 * Gives true if clockwise convexity and 
-	 * false if conter-clockwise convexity
+	 * false if counter-clockwise convexity
 	 * @param node
 	 * @return boolean
 	 */
