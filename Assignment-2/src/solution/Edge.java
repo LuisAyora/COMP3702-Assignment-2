@@ -1,9 +1,11 @@
 package solution;
 
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
-import problem.ASVConfig;
+import problem.ProblemSpec;
 
 /**
  * An immutable class that represents the weighted edge between two nodes for
@@ -131,11 +133,15 @@ public class Edge {
 	}
 	
 	// Dummy test method - Delete this!!!
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		//Create test objects
 		//ASVConfig config1 = new ASVConfig(4, 
 		//		"0.193301 0.238602 0.15 0.213602 0.125 0.170301 0.150 0.127");
 		//ASVAngle angles = new ASVAngle(config1);
+		
+		ProblemSpec problemData=new ProblemSpec();
+		problemData.loadProblem("testcases//3ASV-easy.txt");
+		
 		ArrayList<Double> angleList=new ArrayList<Double>();
 		angleList.add(30.0);
 		angleList.add(150.0);
@@ -166,5 +172,9 @@ public class Edge {
 		System.out.println("Middle: \n"+middle.toString());
 		
 		System.out.println(Double.toString(e1.getWeight()));
+	
+		Random generator=new Random();
+		System.out.println("First Random: "+Double.toString(generator.nextDouble()));
+		System.out.println("Second Random: "+Double.toString(generator.nextDouble()));
 	}
 }
