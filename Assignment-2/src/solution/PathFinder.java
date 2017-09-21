@@ -1,12 +1,16 @@
 package solution;
 import java.util.Queue;
 import java.util.Random;
+
+import problem.Obstacle;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class PathFinder {
 	private Node initNode;
 	private Node goalNode;
+	private ArrayList<Obstacle> obstacles;
 	private Queue<Node> theQueue;
 	private List<Node> inTree;
 	private int maxRandWalk = 100;
@@ -15,9 +19,11 @@ public class PathFinder {
 	private int branchingFact=4;
 	
 	private Random numGenerator=new Random();
-	public PathFinder(Node init,Node end) {
+	
+	public PathFinder(Node init,Node end,ArrayList<Obstacle> obstacles) {
 		initNode=init;
 		goalNode=end;
+		this.obstacles=obstacles;
 		//theQueue=new PriorityQueue();
 	}
 	
@@ -54,6 +60,14 @@ public class PathFinder {
 		
 		double x = numGenerator.nextGaussian()*variance+node.getLocation().getX();
 		double y = numGenerator.nextGaussian()*variance+node.getLocation().getY();
+		if (x>1)
+			x=1-1e-5;
+		if (x<0)
+			x=1e-5;
+		if (y>1)
+			y=1-1e-5;
+		if (y<0)
+			y=1e-5;
 		double angleToAdd=((numGenerator.nextGaussian()*variance+node.getTheta().get(0)/360)*360)%360;
 		if (angleToAdd<0)
 			angleToAdd+=360;
