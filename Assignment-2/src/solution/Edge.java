@@ -20,10 +20,12 @@ public class Edge {
 	final private Node init;
 	final private Node end;
 	final private double weight;
+	final private double distance;
 	
 	public Edge(Node init, Node end) {
 		this.init = init;
 		this.end = end;
+		distance = calcCostDistance(init,end);
 		weight = manhattanMetric(init, end);
 	}
 	
@@ -51,6 +53,15 @@ public class Edge {
 	 */
 	public double getWeight() {
 		return weight;
+	}
+	
+	/**
+	 * Return the sum of manhattan distances
+	 * between the two linked nodes
+	 * @return
+	 */
+	public double getDistance() {
+		return distance;
 	}
 	
 	
@@ -90,7 +101,11 @@ public class Edge {
 		else 
 			return dif2;
 	}
-
+	
+	/**
+	 * Obtains the node in the middle of the node
+	 * @return Node
+	 */
 	public Node middleNode() {
 		Point2D middlePoint=
 				new Point2D.Double((this.getInit().getLocation().getX()+this.getEnd().getLocation().getX())/2,
@@ -121,6 +136,22 @@ public class Edge {
 		}
 		return new Node(middlePoint.getX(),middlePoint.getY(),angles);
 		
+	}
+	/**
+	 * Returns the sum of mahattan distances between each ASV node
+	 * @param a
+	 * @param b
+	 * @return double distance
+	 */
+	private double calcCostDistance(Node a,Node b) {
+		double distance=0;
+		for (int i=0;i<a.getConfigCoords().getASVPositions().size();i++) {
+			distance+=Math.abs(a.getConfigCoords().getASVPositions().get(i).getX()-
+					b.getConfigCoords().getASVPositions().get(i).getX())+
+					Math.abs(a.getConfigCoords().getASVPositions().get(i).getY()-
+							b.getConfigCoords().getASVPositions().get(i).getY());
+		}
+		return distance;
 	}
 	
 	@Override

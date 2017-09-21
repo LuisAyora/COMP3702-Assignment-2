@@ -15,7 +15,6 @@ public class PathFinder {
 	private List<Node> inTree;
 	private int maxRandWalk = 100;
 	private int maxIter = 5000;
-	private int mode = 1;
 	private int branchingFact=4;
 	
 	private Random numGenerator=new Random();
@@ -25,6 +24,18 @@ public class PathFinder {
 		goalNode=end;
 		this.obstacles=obstacles;
 		//theQueue=new PriorityQueue();
+	}
+	
+	public void navigate() {
+		int mode =1;
+		double currentMin=2*initNode.getConfigCoords().getASVPositions().size();
+		while (true) {
+			switch (mode) {
+			case 1:
+			case 2:
+			case 3:
+			}
+		}
 	}
 	
 	/**
