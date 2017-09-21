@@ -2,7 +2,6 @@ package solution;
 
 import java.util.List;
 
-import problem.ASVConfig;
 import problem.Obstacle;
 import tester.Tester;
 
@@ -55,19 +54,27 @@ public class collisionDetect {
 	 */
 	public static boolean isEdgeValid(Edge edge,List<Obstacle> obstacles) {
 		Node middle=edge.middleNode();
-		if (!isNodeValid(middle, obstacles)) {
+		if (test.hasCollision(edge.getEnd().getConfigCoords(), obstacles)  ||
+				!isNodeValid(middle, obstacles) ||
+				test.hasCollision(edge.getInit().getConfigCoords(), obstacles)) {
 			return false;
 		}
 		if (edge.getInit().getLocation().distance(middle.getLocation())<resolution) {
 			return true;
 		}
-		return (isEdgeValid (new Edge(edge.getInit(),middle),obstacles)
-				&&isEdgeValid (new Edge(middle,edge.getInit()),obstacles));
+		return (isEdgeValid (new Edge(middle,edge.getEnd()),obstacles) 
+				&& isEdgeValid (new Edge(edge.getInit(),middle),obstacles));
 	}
 	
-	//PLEASE IMPLEMENT THIS METHOD PROPERLY
-	public static Edge nearestEdge(Edge edge,List<Obstacle> obstacles) {
-		
-		return (new Edge(new Node(),new Node()));
+	/**
+	 * Generates longest valid edge in the given edge direction
+	 * @param edge
+	 * @param obstacles
+	 * @return Edge
+	 */
+	public static Edge furthestValidEdge(Edge edge,List<Obstacle> obstacles) {
+		if (isEdgeValid(edge, obstacles))
+			return edge;
+		return furthestValidEdge(new Edge(edge.getInit(),edge.middleNode()),obstacles);
 	}
 }
