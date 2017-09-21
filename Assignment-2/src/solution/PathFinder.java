@@ -10,7 +10,7 @@ import java.util.List;
 public class PathFinder {
 	private Node initNode;
 	private Node goalNode;
-	private ArrayList<Obstacle> obstacles;
+	private List<Obstacle> obstacles;
 	private Queue<Node> theQueue;
 	private List<Node> inTree;
 	private int maxRandWalk = 100;
@@ -20,7 +20,7 @@ public class PathFinder {
 	
 	private Random numGenerator=new Random();
 	
-	public PathFinder(Node init,Node end,ArrayList<Obstacle> obstacles) {
+	public PathFinder(Node init,Node end,List<Obstacle> obstacles) {
 		initNode=init;
 		goalNode=end;
 		this.obstacles=obstacles;
