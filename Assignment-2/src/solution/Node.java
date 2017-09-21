@@ -25,6 +25,14 @@ public class Node {
 		theta=angles;
 		configCoords=stateToASVConfig(x,y,angles);
 	}
+	
+	//Generic node definition, DELETE THIS AFTER INCLUDING PROPER METHODS IN COOLLISION DETECT
+	public Node() {
+		location=new Point2D.Double(0,0);
+		theta=new ArrayList<Double>();
+		configCoords=new ASVConfig(new ArrayList<Point2D>());
+		
+	}
 
 	//Queries:
 

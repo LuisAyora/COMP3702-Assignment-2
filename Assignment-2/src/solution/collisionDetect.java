@@ -9,8 +9,15 @@ import tester.Tester;
 public class collisionDetect {
 	static double resolution=0.001;
 	static Tester test=new Tester();
-	public static boolean isValidPath(ASVConfig getConfigCoords) {	
+	
+	//PLEASE IMPLEMENT THIS METHOD CORRECTLY
+	public static boolean isNodeValid(Node node,List<Obstacle> obstacles) {	
 		return true;
+	}
+	
+	//PLEASE IMPLEMENT THIS METHOD PROPERLY
+	public static Edge nearestEdge(Edge edge,List<Obstacle> obstacles) {
+		return (new Edge(new Node(),new Node()));
 	}
 	
 	/**
@@ -21,17 +28,16 @@ public class collisionDetect {
 	 */
 	
 	
-	
-	public static boolean isPathColliding(Edge edge,List<Obstacle> obstacles) {
-		Node middle=edge.getInit().middleNode(edge.getEnd());
-		if (test.hasCollision(middle.getConfigCoords(), obstacles)) {
+	public static boolean isEdgeValid(Edge edge,List<Obstacle> obstacles) {
+		Node middle=edge.middleNode();
+		if (isNodeValid(middle, obstacles)) {
 			return true;
 		}
 		if (edge.getInit().getLocation().distance(middle.getLocation())<resolution) {
 			return true;
 		}
-		return (isPathColliding (new Edge(edge.getInit(),middle),obstacles)
-				&&isPathColliding (new Edge(middle,edge.getInit()),obstacles));
+		return (isEdgeValid (new Edge(edge.getInit(),middle),obstacles)
+				&&isEdgeValid (new Edge(middle,edge.getInit()),obstacles));
 	}
 	
 }
