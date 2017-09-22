@@ -19,6 +19,7 @@ public class Node {
 	final private ArrayList<Double> theta;
 	final private ASVConfig configCoords;
 	protected Node parent;
+	public static final double EQ_THRESHOLD = 0.0001;
 	
 	public Node(double x, double y,ArrayList<Double> angles) {
 		location = new Point2D.Double(x, y);
@@ -59,8 +60,17 @@ public class Node {
 	public ASVConfig getConfigCoords() {
 		return configCoords;
 	}
+	
+	/**
+	 *  Gives the parent
+	 * @return Node parent
+	 */
+	public Node getParent() {
+		return parent;
+	}
+	
 	/*
-	 * 
+	 * Gives puts a parent node
 	 */
 	public void setParent(Node parent){
 		this.parent=parent;
@@ -99,6 +109,17 @@ public class Node {
 		
 	}
 	
+	/**
+	 * Returns a cloned version of itelf
+	 */
+	public Node clone() {
+		Node a =new Node(this.getLocation().getX(),this.getLocation().getY(),this.getTheta());
+		if (! (this.getParent() == null))
+			a.setParent(this.getParent());
+		return (a);
+	}
+	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null)
@@ -108,7 +129,8 @@ public class Node {
 		if(getClass() != obj.getClass())
 			return false;
 		Node nd = (Node) obj;
-		if((nd.location != location))
+		Edge edge = new Edge(this,nd);
+		if(edge.getDistance()>EQ_THRESHOLD)
 			return false;
 		return true;
 	}

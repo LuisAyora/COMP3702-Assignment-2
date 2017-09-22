@@ -2,12 +2,13 @@ package solution;
 
 import java.util.List;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import problem.Obstacle;
-import tester.Tester;
+import tester.*;
 
-public class collisionDetect {
+public class CollisionDetect {
 	static double resolution=0.001;
 	static Tester test=new Tester();
 	static double angularMaxError=1e5;
@@ -37,7 +38,7 @@ public class collisionDetect {
 	 * @param obstacles
 	 * @return boolean
 	 */
-	public static boolean isNodeConfigValid(Node node,List<Obstacle> obstacles) {	
+	public static boolean isNodeConfigValid(Node node) {	
 		if (!isConvex(node))
 			return false;
 		if (!test.fitsBounds(node.getConfigCoords()))
@@ -68,6 +69,14 @@ public class collisionDetect {
 				return false;
 			if (dummyAngle*readAngle>angularMaxError || dummyAngle*readAngle<-angularMaxError)
 				dummyAngle=readAngle;
+		}
+		for (int i=1;i<node.getConfigCoords().getASVPositions().size()-1;i++) {
+			if (!sameSide(node.getConfigCoords().getASVPositions().get(0),
+					node.getConfigCoords().getASVPositions().get(node.getConfigCoords().getASVPositions().size()-1),
+					node.getConfigCoords().getASVPositions().get(i),
+					node.getConfigCoords().getASVPositions().get(i+1))) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -111,7 +120,6 @@ public class collisionDetect {
 		return (isEdgeValid (new Edge(middle,edge.getEnd()),obstacles) 
 				&& isEdgeValid (new Edge(edge.getInit(),middle),obstacles));
 	}
-	
 	/**
 	 * Generates longest valid edge in the given edge direction
 	 * @param edge
@@ -123,4 +131,28 @@ public class collisionDetect {
 			return edge;
 		return furthestValidEdge(new Edge(edge.getInit(),edge.middleNode()),obstacles);
 	}
+	
+	/**
+	 * Checks if two points are on the same side of a line
+	 * @param initial
+	 * @param fina
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
+	public static boolean sameSide (Point2D initial, Point2D fina, Point2D p1, Point2D p2) {
+		
+		double a = initial.getY()-fina.getY() ;
+		double b = fina.getX() - initial.getX();
+		double c = (initial.getX()-fina.getX()) * initial.getY() + (fina.getY()-initial.getY())*initial.getX();
+		
+		if (a*p1.getX() + b*p1.getY() + c < 0 && a*p2.getX() + b*p2.getY()  < 0 ) 
+			return true;
+		if (a*p1.getX() + b*p1.getY() + c > 0 && a*p2.getX() + b*p2.getY()  > 0 )
+			return true;
+		else 
+			return false;
+
+	}
+	
 }
