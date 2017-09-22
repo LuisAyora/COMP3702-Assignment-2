@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import problem.Obstacle;
 import tester.*;
 
-public class collisionDetect {
+public class CollisionDetect {
 	static double resolution=0.001;
 	static Tester test=new Tester();
 	static double angularMaxError=1e5;
@@ -38,7 +38,7 @@ public class collisionDetect {
 	 * @param obstacles
 	 * @return boolean
 	 */
-	public static boolean isNodeConfigValid(Node node,List<Obstacle> obstacles) {	
+	public static boolean isNodeConfigValid(Node node) {	
 		if (!isConvex(node))
 			return false;
 		if (!test.fitsBounds(node.getConfigCoords()))
