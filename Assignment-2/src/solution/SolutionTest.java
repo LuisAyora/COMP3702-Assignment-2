@@ -44,13 +44,12 @@ public class SolutionTest {
 		Node middle=e1.middleNode();
 				
 		//check collision
-		CollisionDetect test = new CollisionDetect();
-		System.out.println("Collision free?: \n"+Boolean.toString(test.isNodeValid(middle,tet1.getObstacles())));
-		System.out.println("Edge free?: \n"+Boolean.toString(test.isEdgeValid(e1,tet1.getObstacles())));
-		System.out.println("Edge valid?: \n"+(test.furthestValidEdge(e1,tet1.getObstacles())));
+		System.out.println("Collision free?: \n"+Boolean.toString(CollisionDetect.isNodeValid(middle,tet1.getObstacles())));
+		System.out.println("Edge free?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e1,tet1.getObstacles())));
+		System.out.println("Edge valid?: \n"+(CollisionDetect.furthestValidEdge(e1,tet1.getObstacles())));
 			
-		Edge e2 = test.furthestValidEdge(e1,tet1.getObstacles());
-		System.out.println("Edge free?: \n"+Boolean.toString(test.isEdgeValid(e2,tet1.getObstacles())));
+		Edge e2 = CollisionDetect.furthestValidEdge(e1,tet1.getObstacles());
+		System.out.println("Edge free?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e2,tet1.getObstacles())));
 					
 		//pathfinder checking
 		PathFinder path1 = new PathFinder(n1, n2, tet1.getObstacles());

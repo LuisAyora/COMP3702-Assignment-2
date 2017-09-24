@@ -22,6 +22,7 @@ public class PathFinder {
 		initNode=init;
 		init.setParent(null);
 		goalNode=end;
+		end.setParent(null);
 		this.obstacles=obstacles;
 		//theQueue=new PriorityQueue();
 	}
@@ -50,8 +51,6 @@ public class PathFinder {
 				//double prevDist=this.disToGoal(prevNode);
 				Node nextNode = furthestEdge.getEnd();
 				nextNode.setParent(prevNode);
-				if (CollisionDetect.isEdgeValid(new Edge(nextNode,this.goalNode), obstacles))
-					this.goalNode.setParent(nextNode);
 				double dist=this.disToGoal(nextNode);
 				while (dist<currentMin) {
 					nextNode.setParent(prevNode);
@@ -62,8 +61,12 @@ public class PathFinder {
 					furthestEdge=CollisionDetect.furthestValidEdge(new Edge(prevNode,this.bestFirstStep(prevNode, this.goalNode)),obstacles);
 					//double prevDist=this.disToGoal(prevNode);
 					nextNode = furthestEdge.getEnd();
+					nextNode.setParent(prevNode);
 					dist = this.disToGoal(nextNode);
 				}
+				if (CollisionDetect.isEdgeValid(new Edge(prevNode,this.goalNode), obstacles))
+					this.goalNode.setParent(prevNode);
+				
 				if (!prevNode.equals(head)) {
 					randomWalked.add(prevNode);
 				}
@@ -108,6 +111,7 @@ public class PathFinder {
 					randomWalked.add(nextNode);
 					counter++;
 				}
+				randWalks++;
 				if (randWalks<this.maxRandWalk-1) {
 					mode=1;
 				}else {
