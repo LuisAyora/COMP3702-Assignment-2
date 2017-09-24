@@ -20,7 +20,8 @@ public class CollisionDetect {
 	 * @return boolean
 	 */
 	public static boolean isNodeValid(Node node,List<Obstacle> obstacles) {	
-		if (!isConvex(node))
+		//if (!isConvex(node))
+		if(!test.isConvex(node.getConfigCoords()))
 			return false;
 		if (!test.fitsBounds(node.getConfigCoords()))
 			return false;
@@ -39,7 +40,8 @@ public class CollisionDetect {
 	 * @return boolean
 	 */
 	public static boolean isNodeConfigValid(Node node) {	
-		if (!isConvex(node))
+		//if (!isConvex(node))
+		if(!test.isConvex(node.getConfigCoords()))
 			return false;
 		if (!test.fitsBounds(node.getConfigCoords()))
 			return false;

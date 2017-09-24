@@ -110,7 +110,7 @@ public class Node {
 	}
 	
 	/**
-	 * Returns a cloned version of itelf
+	 * Returns a cloned version of itself
 	 */
 	public Node clone() {
 		Node a =new Node(this.getLocation().getX(),this.getLocation().getY(),this.getTheta());

@@ -219,7 +219,7 @@ public class PathFinder {
 	 * @param variance
 	 * @return
 	 */
-	private Node randomGaussianNode(Node node,double variance) {
+	public Node randomGaussianNode(Node node,double variance) {
 		ArrayList<Double> angles=new ArrayList<Double>();
 		boolean convexity = nodeConvexity(node);
 		
