@@ -192,17 +192,12 @@ public class SolutionTest {
 		System.out.println("SecondLast: \n");
 		System.out.println(fina.getParent());
 		System.out.println(fina.getParent().getParent());
-		List<Node> nodeList=getNodeList(path31.getGoalNode(),new ArrayList<Node>());
+		List<Node> nodeList=path31.getNodeList(path31.getGoalNode(), new ArrayList<Node>());
 		for (int i=0;i<nodeList.size();i++) {
 			System.out.println(nodeList.get(i));
 		}
 	}
 	
-public static ArrayList<Node> getNodeList(Node last,ArrayList<Node> theList){
-	if (last.parent==null)
-		return theList;
-	theList.add(last);
-	return getNodeList(last.getParent(),theList);
-}
+
 	
 }

@@ -222,44 +222,41 @@ public class PathFinder {
 	public Node randomGaussianNode(Node node,double variance) {
 		ArrayList<Double> angles=new ArrayList<Double>();
 		boolean convexity = nodeConvexity(node);
-		
-		double x = numGenerator.nextGaussian()*variance+node.getLocation().getX();
-		if (x>1)
-			x=1-1e-5;
-		if (x<0)
-			x=1e-5;
-		double y = numGenerator.nextGaussian()*variance+node.getLocation().getY();
-		if (y>1)
-			y=1-1e-5;
-		if (y<0)
-			y=1e-5;
-		double angleToAdd=((numGenerator.nextGaussian()*variance+node.getTheta().get(0)/360)*360)%360;
-		if (angleToAdd<0)
-			angleToAdd+=360;
-		angles.add(angleToAdd);
-		for (int i=1;i<node.getTheta().size();i++) {
-			if (convexity) {
-				angleToAdd=(numGenerator.nextGaussian()*variance+node.getTheta().get(i)/180)*180;
-				if (angleToAdd>180)
-					angleToAdd=180;
-				if (angleToAdd<0)
-					angleToAdd=0;
-			}else {
-				angleToAdd=(numGenerator.nextGaussian()*variance+(node.getTheta().get(i)-180)/180)*180+180;
-				if (angleToAdd>360)
-					angleToAdd=359;
-				if (angleToAdd<180)
-					angleToAdd=181;
-			}
+		Node result;
+		do {
+			double x = numGenerator.nextGaussian()*variance+node.getLocation().getX();
+			if (x>1)
+				x=1-1e-5;
+			if (x<0)
+				x=1e-5;
+			double y = numGenerator.nextGaussian()*variance+node.getLocation().getY();
+			if (y>1)
+				y=1-1e-5;
+			if (y<0)
+				y=1e-5;
+			double angleToAdd=((numGenerator.nextGaussian()*variance+node.getTheta().get(0)/360)*360)%360;
+			if (angleToAdd<0)
+				angleToAdd+=360;
 			angles.add(angleToAdd);
-		}
-		Node result=new Node(x,y,angles);
-		if (CollisionDetect.isNodeConfigValid(result))
-			return (result);
-		
-		else
-			return randomGaussianNode(node,variance);
-		
+			for (int i=1;i<node.getTheta().size();i++) {
+				if (convexity) {
+					angleToAdd=(numGenerator.nextGaussian()*variance+node.getTheta().get(i)/180)*180;
+					if (angleToAdd>180)
+						angleToAdd=180;
+					if (angleToAdd<0)
+						angleToAdd=0;
+				}else {
+					angleToAdd=(numGenerator.nextGaussian()*variance+(node.getTheta().get(i)-180)/180)*180+180;
+					if (angleToAdd>360)
+						angleToAdd=359;
+					if (angleToAdd<180)
+						angleToAdd=181;
+				}
+				angles.add(angleToAdd);
+			}
+			result=new Node(x,y,angles);
+		}while(!CollisionDetect.isNodeConfigValid(result));
+		return result;
 	}
 	
 	/**
@@ -287,7 +284,7 @@ public class PathFinder {
 		return this.goalNode;
 	}
 	
-	public static ArrayList<Node> getNodeList(Node last,ArrayList<Node> theList){
+	public ArrayList<Node> getNodeList(Node last,ArrayList<Node> theList){
 		if (last.parent==null)
 			return theList;
 		theList.add(last);
