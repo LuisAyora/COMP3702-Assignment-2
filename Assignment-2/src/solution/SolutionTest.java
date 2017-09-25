@@ -182,7 +182,7 @@ public class SolutionTest {
 		System.out.println("Edge free with furthest edge?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e36,test.getObstacles())));
 							
 		//pathfinder checking
-		PathFinder path31 = new PathFinder(n34, n35, test.getObstacles());
+		PathFinder path31 = new PathFinder(n34, n32, test.getObstacles());
 		//Node n34 = path31.randomGaussianNode(n31, 0.01);
 		//System.out.println(n34.toString());
 				

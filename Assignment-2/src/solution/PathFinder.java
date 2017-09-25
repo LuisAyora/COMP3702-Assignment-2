@@ -256,6 +256,7 @@ public class PathFinder {
 		Node result=new Node(x,y,angles);
 		if (CollisionDetect.isNodeConfigValid(result))
 			return (result);
+		
 		else
 			return randomGaussianNode(node,variance);
 		
@@ -284,5 +285,12 @@ public class PathFinder {
 	 */
 	public Node getGoalNode() {
 		return this.goalNode;
+	}
+	
+	public static ArrayList<Node> getNodeList(Node last,ArrayList<Node> theList){
+		if (last.parent==null)
+			return theList;
+		theList.add(last);
+		return getNodeList(last.getParent(),theList);
 	}
 }
