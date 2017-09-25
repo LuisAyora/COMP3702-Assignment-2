@@ -3,9 +3,10 @@ import java.util.Random;
 
 import problem.Obstacle;
 import solution.CollisionDetect;
-
+import problem.ASVConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 public class PathFinder {
 	private Node initNode;
@@ -15,6 +16,7 @@ public class PathFinder {
 	private int maxNodesInRandWalk=20;
 	private int branchingFact=4;
 	private double gausVariance=0.001;
+	private List<ASVConfig> finalPath;
 	
 	private Random numGenerator=new Random();
 	
@@ -289,5 +291,14 @@ public class PathFinder {
 			return theList;
 		theList.add(last);
 		return getNodeList(last.getParent(),theList);
+	}
+	
+	public ArrayList<ASVConfig> finalSolution(ArrayList<Node> nodePath) {
+		ArrayList<ASVConfig> finalPath = new ArrayList<ASVConfig>();
+		Collections.reverse(nodePath);
+		for (Node nd : nodePath) {
+			finalPath.add(nd.getConfigCoords());
+		}
+		return finalPath;
 	}
 }
