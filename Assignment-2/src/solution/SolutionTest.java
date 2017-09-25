@@ -10,6 +10,7 @@ public class SolutionTest {
 	// Dummy test method - Delete this
 	public static void main(String[] args) throws IOException{
 		// Generate two ASVConfig object
+		/*
 		ASVConfig config = new ASVConfig(7, 
 						"0.193301 0.238602 0.15 0.213602 0.125 0.170301 0.150 0.127 "
 						+ "0.200 0.127 0.225 0.170301 0.225 0.220301");	
@@ -87,10 +88,121 @@ public class SolutionTest {
 		System.out.println(n1.toString());
 		*/
 		
-		path1.navigate();
+		//path1.navigate();
 		
+		/*
 		
-	
+		/*
+		 * Test for 3ASV-easy 
+		 * */
+		
+		// Initial conf
+		ASVConfig c31 = new ASVConfig(3, "0.150 0.225 0.150 0.275 0.200 0.275 ");	
+		//final conf
+		ASVConfig c32 = new ASVConfig(3, "0.850 0.225 0.850 0.275 0.900 0.275");
+		//initial with more 'y' 
+		ASVConfig c33 = new ASVConfig(3, "0.150 0.775 0.150 0.775 0.200 0.575");
+		//initial config to be in front of the middle space between obstacles			
+		ASVConfig c34 = new ASVConfig(3, "0.150 0.46 0.150 0.510 0.200 0.510");
+		//initial config to be at the end of the middle space between obstacles			
+		ASVConfig c35 = new ASVConfig(3, "0.850 0.46 0.850 0.510 0.900 0.510");
+		
+		//Load problem to have the obstacles
+		ProblemSpec test = new ProblemSpec();
+		String address3="testcases//3ASV-easy.txt";
+		test.loadProblem(address3);
+					
+		//Printing configuration
+		System.out.println("1 configuration 3ASV: "+c31.toString());
+		System.out.println("2 configuration 3ASV: "+c32.toString());
+		System.out.println("3 configuration 3ASV: "+c33.toString());
+		System.out.println("4 configuration 3ASV: "+c34.toString());
+		System.out.println("5 configuration 3ASV: "+c35.toString());
+		//Generate angles
+		ASVAngle a31 = new ASVAngle(c31);
+		System.out.println("First angles 3ASV: "+a31.getThetaAngles());
+					
+		ASVAngle a32 = new ASVAngle(c32);
+		System.out.println("Second angles: "+a32.getThetaAngles());
+				
+		//Same x position for ASV 31 but changed in y direction
+		ASVAngle a33 = new ASVAngle(c33);
+		System.out.println("Third angles: "+a33.getThetaAngles());
+		
+		//In front of the space between obstacles
+		ASVAngle a34 = new ASVAngle(c34);
+		System.out.println("4 angles: "+a34.getThetaAngles());
+		
+		//At the end of the space
+		ASVAngle a35 = new ASVAngle(c35);
+		System.out.println("5 angles: "+a35.getThetaAngles());
+		
+		//creation of NODES
+		Node n31=new Node(c31.getASVPositions().get(0).getX(),c32.getASVPositions().get(0).getY(),
+						  a31.getThetaAngles());
+		Node n32 = new Node(c32.getASVPositions().get(0).getX(),c32.getASVPositions().get(0).getY(),
+							a32.getThetaAngles());
+		Node n33 = new Node(c33.getASVPositions().get(0).getX(),c33.getASVPositions().get(0).getY(),
+							a33.getThetaAngles());
+		Node n34 = new Node(c34.getASVPositions().get(0).getX(),c34.getASVPositions().get(0).getY(),
+				a34.getThetaAngles());
+		Node n35 = new Node(c35.getASVPositions().get(0).getX(),c35.getASVPositions().get(0).getY(),
+				a35.getThetaAngles());
+		//creation of edges
+		//test between initial and final node
+		Edge e31 = new Edge(n31, n32);
+		//middle node from edge from initial to end
+		Node middle31 = e31.middleNode();
+		
+		//edge from initial to middle
+		Edge e32 = new Edge(n31, middle31);
+		
+		//edge from initial to edge in the same direction up
+		Edge e33 = new Edge(n31, n33);
+		
+		//edge from node located in the space between obstacles and final node
+		Edge e34 =  new Edge(n34,n32);
+		Node middle32 = e34.middleNode();
+		
+		//Test horizontal
+		//edge from node located in the space between obstacles and final node
+		Edge e35 =  new Edge(n34,n35);
+		Node middle33 = e35.middleNode();
+		
+		//check collision
+		System.out.println("Obstacles 3ASV list: \n"+test.getObstacles().toString());
+				
+		System.out.println("Collision free node?: \n"+Boolean.toString(CollisionDetect.isNodeValid(n34,test.getObstacles())));
+		
+		System.out.println("Middle node: "+ middle32.toString());
+		System.out.println("Edge free?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e35,test.getObstacles())));
+					
+		Edge e36 = CollisionDetect.furthestValidEdge(e35,test.getObstacles());
+		System.out.println("Edge valid location with furthestEdge?: \n"+(e36.toString()));
+		System.out.println("Edge free with furthest edge?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e36,test.getObstacles())));
+							
+		//pathfinder checking
+		PathFinder path31 = new PathFinder(n34, n35, test.getObstacles());
+		//Node n34 = path31.randomGaussianNode(n31, 0.01);
+		//System.out.println(n34.toString());
+				
+				
+		path31.navigate();
+		Node fina = path31.getGoalNode();
+		System.out.println("SecondLast: \n");
+		System.out.println(fina.getParent());
+		System.out.println(fina.getParent().getParent());
+		List<Node> nodeList=getNodeList(path31.getGoalNode(),new ArrayList<Node>());
+		for (int i=0;i<nodeList.size();i++) {
+			System.out.println(nodeList.get(i));
 		}
+	}
+	
+public static ArrayList<Node> getNodeList(Node last,ArrayList<Node> theList){
+	if (last.parent==null)
+		return theList;
+	theList.add(last);
+	return getNodeList(last.getParent(),theList);
+}
 	
 }

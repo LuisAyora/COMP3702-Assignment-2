@@ -12,9 +12,9 @@ public class PathFinder {
 	private Node goalNode;
 	private List<Obstacle> obstacles;
 	private int maxRandWalk = 10;
-	private int maxNodesInRandWalk=200;
+	private int maxNodesInRandWalk=20;
 	private int branchingFact=4;
-	private double gausVariance=0.01;
+	private double gausVariance=0.001;
 	
 	private Random numGenerator=new Random();
 	
@@ -255,9 +255,10 @@ public class PathFinder {
 		}
 		Node result=new Node(x,y,angles);
 		if (CollisionDetect.isNodeConfigValid(result))
-			return (new Node(x,y,angles));
+			return (result);
 		else
 			return randomGaussianNode(node,variance);
+		
 	}
 	
 	/**
@@ -274,5 +275,14 @@ public class PathFinder {
 		if (accumulator>180)
 			return false;
 		return true;
+	}
+	
+	//Querys
+	/**
+	 * 
+	 * @return Goal Node
+	 */
+	public Node getGoalNode() {
+		return this.goalNode;
 	}
 }

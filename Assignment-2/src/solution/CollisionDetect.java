@@ -27,8 +27,8 @@ public class CollisionDetect {
 			return false;
 		if (!test.hasEnoughArea(node.getConfigCoords()))
 			return false;
-		if (broomsCross(node))
-			return false;
+		//if (broomsCross(node))
+		//	return false;
 		if (test.hasCollision(node.getConfigCoords(), obstacles))
 			return false;
 		return true;
@@ -47,8 +47,8 @@ public class CollisionDetect {
 			return false;
 		if (!test.hasEnoughArea(node.getConfigCoords()))
 			return false;
-		if (broomsCross(node))
-			return false;
+		//if (broomsCross(node))
+		//	return false;
 		return true;
 	}
 	
