@@ -162,50 +162,5 @@ public class Edge {
 		return "Initial: " + init.toString() + "\n Final: " + end.toString()
 		+ "\n Weight:" + Double.toString(weight);
 	}
-	
-	// Dummy test method - Delete this!!!
-	public static void main(String[] args) throws IOException {
-		//Create test objects
-		//ASVConfig config1 = new ASVConfig(4, 
-		//		"0.193301 0.238602 0.15 0.213602 0.125 0.170301 0.150 0.127");
-		//ASVAngle angles = new ASVAngle(config1);
-		
-		ProblemSpec problemData=new ProblemSpec();
-		problemData.loadProblem("testcases//3ASV-easy.txt");
-		
-		ArrayList<Double> angleList=new ArrayList<Double>();
-		angleList.add(30.0);
-		angleList.add(150.0);
-		angleList.add(150.0);
-		angleList.add(190.0);
-		angleList.add(20.0);
-		angleList.add(30.0);
-		angleList.add(170.0);
-		Node n1 = new Node( 0.193301, 0.238602,angleList);
-		
-		//angles.updateStatus(new ASVConfig(4, 
-		//		"0.893301 0.238602 0.85 0.213602 0.825 0.170301 0.850"));
-		
-		ArrayList<Double> angleList2=new ArrayList<Double>();
-		angleList2.add(330.0);
-		angleList2.add(210.0);
-		angleList2.add(30.0);
-		angleList2.add(310.0);
-		angleList2.add(300.0);
-		angleList2.add(200.0);
-		angleList2.add(330.0);
-		
-		Node n2 = new Node( 0.893301, 0.238602,angleList2);
-		Edge e1 = new Edge(n1, n2);
-		Node middle=e1.middleNode();
-		System.out.println("First: \n"+n1.toString());
-		System.out.println("End: \n"+n2.toString());
-		System.out.println("Middle: \n"+middle.toString());
-		
-		System.out.println(Double.toString(e1.getWeight()));
-	
-		Random generator=new Random();
-		System.out.println("First Random: "+Double.toString(generator.nextDouble()));
-		System.out.println("Second Random: "+Double.toString(generator.nextDouble()));
-	}
+
 }

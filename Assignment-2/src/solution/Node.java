@@ -19,7 +19,7 @@ public class Node {
 	final private ArrayList<Double> theta;
 	final private ASVConfig configCoords;
 	protected Node parent;
-	public static final double EQ_THRESHOLD = 0.0001;
+	public static final double EQ_THRESHOLD = 1e-5;
 	
 	public Node(double x, double y,ArrayList<Double> angles) {
 		location = new Point2D.Double(x, y);

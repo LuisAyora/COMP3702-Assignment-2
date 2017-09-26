@@ -13,11 +13,10 @@ public class PathFinder {
 	private Node goalNode;
 	private List<Obstacle> obstacles;
 	private int maxRandWalk = 4;
-	private int maxNodesInRandWalk=20;
+	private int maxNodesInRandWalk=2000;
 	private int branchingFact=3;
-	private double gausVariance=0.0001;
-	private List<ASVConfig> finalPath;
-	private int MAX_ITERATIONS = 20000;
+	private double gausVariance=0.001;
+	private int MAX_ITERATIONS = 200000;
 	private ArrayList<Node> randomWalked;
 	private int RANDOM_GAUSS_LIMIT = 5;
 	private Random numGenerator=new Random();
@@ -32,7 +31,7 @@ public class PathFinder {
 	}
 	
 	public void navigate() {
-		int mode = 1;
+		int mode = 2;
 		randomWalked=new ArrayList<Node>();		
 		double currentMin=2*initNode.getConfigCoords().getASVPositions().size();
 		randomWalked.add(this.initNode);
@@ -50,27 +49,24 @@ public class PathFinder {
 				*/
 				head = popList(randomWalked);
 				Node prevNode = head.clone();
-				Node transition = bestFirstStep(prevNode,this.goalNode);
-				if (transition == null) {
-					mode = 2;
-					break;
-				}
-				Edge furthestEdge=CollisionDetect.furthestValidEdge(
-						new Edge(prevNode,transition)
-						,obstacles);
-				//double prevDist=this.disToGoal(prevNode);
-				Node nextNode = furthestEdge.getEnd();
-				nextNode.setParent(prevNode);
-				double dist=this.disToGoal(nextNode);
-				while (dist<currentMin) {
+				Node nextNode = bestFirstStep(prevNode,this.goalNode);
+				double dist = currentMin;
+				if (nextNode!=null) {
 					nextNode.setParent(prevNode);
-					if (CollisionDetect.isEdgeValid(new Edge(nextNode,this.goalNode), obstacles))
-						this.goalNode.setParent(nextNode);
-					currentMin=dist;
-					prevNode=nextNode.clone();
-					furthestEdge=CollisionDetect.furthestValidEdge(new Edge(prevNode,this.bestFirstStep(prevNode, this.goalNode)),obstacles);
+					dist=this.disToGoal(nextNode);
+				}
+				while (dist<=currentMin) {
+					if (nextNode!=null) {
+						nextNode.setParent(prevNode);
+						dist=this.disToGoal(nextNode);
+						if (CollisionDetect.isEdgeValid(new Edge(nextNode,this.goalNode), obstacles))
+							this.goalNode.setParent(nextNode);
+						if (dist<currentMin)
+							currentMin=dist;
+							prevNode=nextNode.clone();
+					}
 					//double prevDist=this.disToGoal(prevNode);
-					nextNode = furthestEdge.getEnd();
+					nextNode = bestFirstStep(prevNode,this.goalNode);
 					nextNode.setParent(prevNode);
 					dist = this.disToGoal(nextNode);
 				}
@@ -97,7 +93,7 @@ public class PathFinder {
 				randomWalking.add(prevNode);
 				double localMin=this.disToGoal(prevNode);
 				
-				furthestEdge=CollisionDetect.furthestValidEdge(new Edge(prevNode,this.randomNode(prevNode)), obstacles);
+				Edge furthestEdge=CollisionDetect.furthestValidEdge(new Edge(prevNode,this.randomNode(prevNode)), obstacles);
 				nextNode = furthestEdge.getEnd();
 				nextNode.setParent(prevNode);
 				
@@ -126,11 +122,12 @@ public class PathFinder {
 					counter++;
 				}
 				randWalks++;
+				/*
 				if (randWalks<this.maxRandWalk-1) {
 					mode=1;
 				}else {
 					mode=3;
-				}
+				}*/
 				break;
 			case 3:
 				int index=numGenerator.nextInt(randomWalked.size());
@@ -143,7 +140,7 @@ public class PathFinder {
 			iterCount++;
 			System.out.println("Iterations: "+Integer.toString(iterCount));
 		}
-		
+		System.out.println("OUT OF BIG WHILE");
 	}
 	
 	/**
@@ -166,14 +163,15 @@ public class PathFinder {
 	private Node bestFirstStep(Node head,Node destination) {
 		Node output=this.randomGaussianNode(head, this.gausVariance);
 		double dist = 2*(head.getTheta().size()+1);
-		if (output==null)
-			return null;
-		dist=this.disToGoal(output);
+		if (output!=null)
+			dist=this.disToGoal(output);
 		for (int i=1;i<this.branchingFact;i++) {
 			Node rand=this.randomGaussianNode(head, this.gausVariance);
-			double ndist=this.disToGoal(rand);
-			if (ndist<dist)
-				output=rand;
+			if (rand!=null) {
+				double ndist=this.disToGoal(rand);
+				if (ndist<dist)
+					output=rand;
+			}			
 		}
 		return output;
 	}
@@ -214,22 +212,23 @@ public class PathFinder {
 	 * @return Node
 	 */
 	private Node randomNode(Node node) {
-		ArrayList<Double> angles=new ArrayList<Double>();
-		boolean convexity=nodeConvexity(node);
-		double x=numGenerator.nextDouble();
-		double y=numGenerator.nextDouble();
-		angles.add(numGenerator.nextDouble()*360);
-		for (int i=1;i<node.getTheta().size();i++) {
-			if (convexity)
-				angles.add(numGenerator.nextDouble()*180);
-			else
-				angles.add(numGenerator.nextDouble()*180+180);
-		}
-		Node result=new Node(x,y,angles);
-		if (CollisionDetect.isNodeConfigValid(result))
-			return (new Node(x,y,angles));
-		else
-			return randomNode(node);
+		ArrayList<Double> angles;
+		Node result;
+		do{
+			angles =new ArrayList<Double>();
+			boolean convexity=nodeConvexity(node);
+			double x=numGenerator.nextDouble();
+			double y=numGenerator.nextDouble();
+			angles.add(numGenerator.nextDouble()*360);
+			for (int i=1;i<node.getTheta().size();i++) {
+				if (convexity)
+					angles.add(numGenerator.nextDouble()*180);
+				else
+					angles.add(numGenerator.nextDouble()*180+180);
+			}
+			result=new Node(x,y,angles);
+		}while(!CollisionDetect.isNodeConfigValid(result));
+		return (result);
 	}
 	
 	/**
@@ -278,9 +277,9 @@ public class PathFinder {
 			}
 			result=new Node(x,y,angles);
 			counter++;
-			System.out.println("Random Gen: "+Integer.toString(counter));
-		}while(!CollisionDetect.isNodeConfigValid(result) && counter<this.RANDOM_GAUSS_LIMIT);
-		if (CollisionDetect.isNodeConfigValid(result))
+			//System.out.println("Random Gen: "+Integer.toString(counter));
+		}while(!CollisionDetect.isNodeValid(result,obstacles) && counter<this.RANDOM_GAUSS_LIMIT);
+		if (CollisionDetect.isNodeValid(result,obstacles))
 			return result;
 		return null;
 	}
@@ -314,6 +313,7 @@ public class PathFinder {
 		return randomWalked;
 	}
 	
+	/*
 	public ArrayList<Node> getNodeList(Node last,ArrayList<Node> theList){
 		if (last.parent==null) {
 			theList.add(last);
@@ -321,6 +321,17 @@ public class PathFinder {
 		}
 		theList.add(last);
 		return getNodeList(last.getParent(),theList);
+	}*/
+	
+	public ArrayList<Node> getNodeList(Node last){
+		ArrayList<Node> nodeList = new ArrayList<Node>();
+		Node end = last.clone();
+		nodeList.add(end);
+		while (end.getParent()!=null) {
+			nodeList.add(end.getParent());
+			end = end.getParent().clone();
+		}
+		return nodeList;
 	}
 	
 	public ArrayList<ASVConfig> finalSolution(ArrayList<Node> nodePath) {

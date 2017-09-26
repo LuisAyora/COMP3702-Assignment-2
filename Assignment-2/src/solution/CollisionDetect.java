@@ -112,9 +112,9 @@ public class CollisionDetect {
 	 */
 	public static boolean isEdgeValid(Edge edge,List<Obstacle> obstacles) {
 		Node middle=edge.middleNode();
-		if (test.hasCollision(edge.getEnd().getConfigCoords(), obstacles)  ||
+		if (!isNodeValid(edge.getEnd(), obstacles)  ||
 				!isNodeValid(middle, obstacles) ||
-				test.hasCollision(edge.getInit().getConfigCoords(), obstacles)) {
+				!isNodeValid(edge.getInit(), obstacles)) {
 			return false;
 		}
 		if (edge.getInit().getLocation().distance(middle.getLocation())<resolution) {
@@ -138,14 +138,22 @@ public class CollisionDetect {
 	
 	
 	public static Edge furthestValidEdge(Edge edge,List<Obstacle> obstacles) {
+		Edge edgeA= new Edge(edge.getInit(),edge.getEnd());
 		int count=0;
-		while(!isEdgeValid(edge,obstacles)) {
-			edge= new Edge(edge.getInit(),edge.middleNode());
+		while(!isEdgeValid(edgeA,obstacles) && !edgeA.getInit().equals(edgeA.getEnd())) {
+			edgeA= new Edge(edgeA.getInit(),edgeA.middleNode());
+			/*
+			System.out.println("the Edge: "+edgeA.toString());
+			System.out.println("First node valid? : "+Boolean.toString(isNodeValid(edgeA.getInit(),obstacles)));
+			System.out.println(edgeA.getInit().getConfigCoords());
+			System.out.println("Middle node valid? : "+Boolean.toString(isNodeValid(edgeA.getEnd(),obstacles)));
+			System.out.println(edgeA.getEnd().getConfigCoords());
 			System.out.println("Counter: "+Integer.toString(count));
-			System.out.println("Edge: "+edge.toString());
+			System.out.println("Edge: "+edgeA.toString());
+			*/
 			count++;
 		}
-		return edge;
+		return edgeA;
 	}
 	
 	/**
