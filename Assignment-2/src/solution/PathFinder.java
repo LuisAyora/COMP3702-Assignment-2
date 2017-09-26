@@ -17,7 +17,7 @@ public class PathFinder {
 	private int branchingFact=3;
 	private double gausVariance=0.0001;
 	private List<ASVConfig> finalPath;
-	private int MAX_ITERATIONS = 2000;
+	private int MAX_ITERATIONS = 20000;
 	private ArrayList<Node> randomWalked;
 	private int RANDOM_GAUSS_LIMIT = 5;
 	private Random numGenerator=new Random();
@@ -223,7 +223,7 @@ public class PathFinder {
 			if (convexity)
 				angles.add(numGenerator.nextDouble()*180);
 			else
-				angles.add(numGenerator.nextDouble()*180-180);
+				angles.add(numGenerator.nextDouble()*180+180);
 		}
 		Node result=new Node(x,y,angles);
 		if (CollisionDetect.isNodeConfigValid(result))

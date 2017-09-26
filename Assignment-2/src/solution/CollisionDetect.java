@@ -129,23 +129,24 @@ public class CollisionDetect {
 	 * @param obstacles
 	 * @return Edge
 	 */
-	public static Edge furthestValidEdge(Edge edge,List<Obstacle> obstacles) {
-		if (isEdgeValid(edge, obstacles))
-			return edge;
-		return furthestValidEdge(new Edge(edge.getInit(),edge.middleNode()),obstacles);
-	}
-	
 	/*
 	public static Edge furthestValidEdge(Edge edge,List<Obstacle> obstacles) {
-		
-		while(!isEdgeValid(edge)) {
-			
-		}
-		
 		if (isEdgeValid(edge, obstacles))
 			return edge;
 		return furthestValidEdge(new Edge(edge.getInit(),edge.middleNode()),obstacles);
 	}*/
+	
+	
+	public static Edge furthestValidEdge(Edge edge,List<Obstacle> obstacles) {
+		int count=0;
+		while(!isEdgeValid(edge,obstacles)) {
+			edge= new Edge(edge.getInit(),edge.middleNode());
+			System.out.println("Counter: "+Integer.toString(count));
+			System.out.println("Edge: "+edge.toString());
+			count++;
+		}
+		return edge;
+	}
 	
 	/**
 	 * Checks if two points are on the same side of a line

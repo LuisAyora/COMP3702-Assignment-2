@@ -112,10 +112,10 @@ public class SolutionTest {
 		 * */
 		
 		// Initial conf
-		/*
-		ASVConfig c31 = new ASVConfig(3, "0.150 0.225 0.150 0.275 0.200 0.275 ");	
+		
+		ASVConfig c31 = new ASVConfig(3, "0.150 0.2 0.150 0.15 0.200 0.15 ");	
 		//final conf
-		ASVConfig c32 = new ASVConfig(3, "0.850 0.225 0.850 0.275 0.900 0.275");
+		ASVConfig c32 = new ASVConfig(3, "0.850 0.2 0.8 0.2 0.8 0.15");
 		//initial with more 'y' 
 		ASVConfig c33 = new ASVConfig(3, "0.150 0.775 0.150 0.775 0.200 0.575");
 		//initial config to be in front of the middle space between obstacles			
@@ -125,7 +125,7 @@ public class SolutionTest {
 		
 		//Load problem to have the obstacles
 		ProblemSpec test = new ProblemSpec();
-		String address3="testcases//3ASV-easy.txt";
+		String address3="testcases//3ASV-x4.txt";
 		test.loadProblem(address3);
 					
 		//Printing configuration
@@ -221,7 +221,7 @@ public class SolutionTest {
 			
 		test.setPath(path31.finalSolution(nodeList));
 		test.saveSolution("testcases//solution1.txt");
-		*/
+		
 		
 		
 		//path31.finalSolution(nodeList);
@@ -239,6 +239,7 @@ public class SolutionTest {
 		 
 	
 		 //Load problem to have the obstacles
+		 
 		 ProblemSpec test3 = new ProblemSpec();
 		 String ad3="testcases//7ASV-easy.txt";
 		 test3.loadProblem(ad3);
@@ -296,14 +297,13 @@ public class SolutionTest {
 	
 			 test3.setPath(path71.finalSolution(nodeList71));
 			 test3.saveSolution("testcases//solution7ASV-easy.txt");
-		*/ 
-			 
+		*/ 	 
 		
 		
 		/*
 		 * Test for 7 ASV - x4
 		 * */
-		 
+		/* 
 		ASVConfig c71 = new ASVConfig(7, 
 						"0.193301 0.238602 0.15 0.213602 0.125 0.170301 0.150 0.127 0.200 0.127 0.225 0.170301 0.225 0.220301");	
 		 ASVConfig c72 = new ASVConfig(7, 
@@ -364,7 +364,7 @@ public class SolutionTest {
 			
 		  test31.setPath(path71.finalSolution(nodeList71));
 		  test31.saveSolution("testcases//solution7ASV-x4.txt");
-		  
+		  */
 		}
 		
 	}
