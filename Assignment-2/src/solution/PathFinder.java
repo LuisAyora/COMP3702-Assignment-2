@@ -12,9 +12,9 @@ public class PathFinder {
 	private Node initNode;
 	private Node goalNode;
 	private List<Obstacle> obstacles;
-	private int maxRandWalk = 10;
-	private int maxNodesInRandWalk=20;
-	private int branchingFact=4;
+	private int maxRandWalk = 4;
+	private int maxNodesInRandWalk=200;
+	private int branchingFact=3;
 	private double gausVariance=0.001;
 	private List<ASVConfig> finalPath;
 	

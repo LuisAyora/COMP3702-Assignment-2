@@ -72,8 +72,23 @@ public class SolutionTest {
 					
 		//pathfinder checking
 		PathFinder path1 = new PathFinder(n1, n2, tet1.getObstacles());
-		Node n4 = path1.randomGaussianNode(n1, 0.01);
-		System.out.println(n4.toString());
+		//Node n4 = path1.randomGaussianNode(n1, 0.01);
+		//System.out.println(n4.toString());
+		
+		path1.navigate();
+		Node fina = path1.getGoalNode();
+		System.out.println("SecondLast: \n");
+		System.out.println(fina.getParent());
+		System.out.println(fina.getParent().getParent());
+		ArrayList<Node> nodeList=path1.getNodeList(path1.getGoalNode(), new ArrayList<Node>());
+		
+		for (int i=0;i<nodeList.size();i++) {
+			System.out.println(nodeList.get(i));
+			
+		tet1.setPath(path1.finalSolution(nodeList));
+		tet1.saveSolution("testcases//solution1.txt");
+		*/
+		
 		//System.out.println(n3.toString());
 		/*
 		int count = 0;
@@ -95,7 +110,7 @@ public class SolutionTest {
 		/*
 		 * Test for 3ASV-easy 
 		 * */
-		
+		/*
 		// Initial conf
 		ASVConfig c31 = new ASVConfig(3, "0.150 0.225 0.150 0.275 0.200 0.275 ");	
 		//final conf
@@ -192,12 +207,155 @@ public class SolutionTest {
 		System.out.println("SecondLast: \n");
 		System.out.println(fina.getParent());
 		System.out.println(fina.getParent().getParent());
-		List<Node> nodeList=path31.getNodeList(path31.getGoalNode(), new ArrayList<Node>());
+		ArrayList<Node> nodeList=path31.getNodeList(path31.getGoalNode(), new ArrayList<Node>());
+		
 		for (int i=0;i<nodeList.size();i++) {
 			System.out.println(nodeList.get(i));
-		}
-	}
+			
+		test.setPath(path31.finalSolution(nodeList));
+		test.saveSolution("testcases//solution1.txt");
+		*/
+		//path31.finalSolution(nodeList);
+		
+		/*
+		 * Test for 7 ASV easy
+		 */
+		 /*
+		 ASVConfig c71 = new ASVConfig(7, 
+				"0.193301 0.238602 0.15 0.213602 0.125 0.170301 0.150 0.127 0.200 0.127 0.225 0.170301 0.225 0.220301");	
+		 ASVConfig c72 = new ASVConfig(7, 
+				 "0.893301 0.238602 0.85 0.213602 0.825 0.170301 0.850 0.127 0.900 0.127 0.925 0.170301 0.925 0.220301");
+		 ASVConfig c73 = new ASVConfig(7, 
+				 "0.893301 0.238602 0.85 0.213602 0.825 0.170301 0.850 0.127 0.900 0.127 0.925 0.170301 0.925 0.220301");
+		 
 	
+		 //Load problem to have the obstacles
+		 ProblemSpec test3 = new ProblemSpec();
+		 String ad3="testcases//7ASV-easy.txt";
+		 test3.loadProblem(ad3);
+	
+		 //Printing configuration
+		 System.out.println("First configuration: "+c71.toString());
+		 System.out.println("Second configuration: "+c72.toString());
+		 
+		 //Generate angles
+		 ASVAngle a71 = new ASVAngle(c71);
+		 System.out.println("First angles: "+a71.getThetaAngles());
+	
+		 ASVAngle a72 = new ASVAngle(c72);
+		 System.out.println("Second angles: "+a72.getThetaAngles());
+
+		 
+
+		 //creation of NODES
+		 Node n71=new Node(c71.getASVPositions().get(0).getX(),c71.getASVPositions().get(0).getY(),
+				 a71.getThetaAngles());
+		 Node n72 = new Node(c72.getASVPositions().get(0).getX(),c72.getASVPositions().get(0).getY(),
+				a72.getThetaAngles());
+	
+		 //creation of edges
+		 Edge e71 = new Edge(n71, n72);
+		 Node middle71=e71.middleNode();
+		 
+		 //check collision
+		 System.out.println("Obstacles list: \n"+test3.getObstacles().toString());
+		 //System.out.println("Is convex?: \n"+Boolean.toString(CollisionDetect.isConvex(n1)));
+
+		 System.out.println("Collision free node?: \n"+Boolean.toString(CollisionDetect.isNodeValid(n71,test3.getObstacles())));
+		 //System.out.println("Edge free?: \n"+ );
+		 System.out.println("Middle node: "+ middle71.toString());
+		 System.out.println("Edge free?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e71,test3.getObstacles())));
+		 System.out.println("Edge valid?: \n"+(CollisionDetect.furthestValidEdge(e71,test3.getObstacles())));
+	
+		 Edge e72 = CollisionDetect.furthestValidEdge(e71,test3.getObstacles());
+		 System.out.println("Edge free?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e72,test3.getObstacles())));
+			
+		 //pathfinder checking
+		 PathFinder path71 = new PathFinder(n71, n72, test3.getObstacles());
+		 //Node n4 = path1.randomGaussianNode(n1, 0.01);
+		 //System.out.println(n4.toString());
+
+		 path71.navigate();
+		 Node final71 = path71.getGoalNode();
+		 System.out.println("SecondLast: \n");
+		 System.out.println(final71.getParent());
+		 System.out.println(final71.getParent().getParent());
+		 ArrayList<Node> nodeList71 = path71.getNodeList(path71.getGoalNode(), new ArrayList<Node>());
+
+		 for (int j=0;j<nodeList71.size();j++) {
+			 System.out.println(nodeList71.get(j));
+	
+			 test3.setPath(path71.finalSolution(nodeList71));
+			 test3.saveSolution("testcases//solution7ASV-easy.txt");
+		*/ 
+			 
+		/*
+		 * Test for 7 ASV - x4
+		 * */
+		 ASVConfig c71 = new ASVConfig(7, 
+						"0.193301 0.238602 0.15 0.213602 0.125 0.170301 0.150 0.127 0.200 0.127 0.225 0.170301 0.225 0.220301");	
+		 ASVConfig c72 = new ASVConfig(7, 
+						 "0.893301 0.238602 0.85 0.213602 0.825 0.170301 0.850 0.127 0.900 0.127 0.925 0.170301 0.925 0.220301");
+		 
+		 //Load problem to have the obstacles
+	     ProblemSpec test31 = new ProblemSpec();
+		 String ad31="testcases//7-ASV-x4.txt";
+	     test31.loadProblem(ad31);
+			
+		 //Printing configuration
+	     System.out.println("First configuration: "+c71.toString());
+	     System.out.println("Second configuration: "+c72.toString());
+				 
+		 //Generate angles
+	     ASVAngle a71 = new ASVAngle(c71);
+	     System.out.println("First angles: "+a71.getThetaAngles());
+			
+		 ASVAngle a72 = new ASVAngle(c72);
+		 System.out.println("Second angles: "+a72.getThetaAngles());
+
+		//creation of NODES
+		 Node n71=new Node(c71.getASVPositions().get(0).getX(),c71.getASVPositions().get(0).getY(),
+						a71.getThetaAngles());
+		 Node n72 = new Node(c72.getASVPositions().get(0).getX(),c72.getASVPositions().get(0).getY(),
+						a72.getThetaAngles());
+			
+		 //creation of edges
+		 Edge e71 = new Edge(n71, n72);
+		 Node middle71=e71.middleNode();
+				
+		 //check collision
+		 System.out.println("Obstacles list: \n"+test31.getObstacles().toString());
+				 //System.out.println("Is convex?: \n"+Boolean.toString(CollisionDetect.isConvex(n1)));
+
+		 System.out.println("Collision free node?: \n"+Boolean.toString(CollisionDetect.isNodeValid(n71,test31.getObstacles())));
+		 //System.out.println("Edge free?: \n"+ );
+		 System.out.println("Middle node: "+ middle71.toString());
+		 System.out.println("Edge free?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e71,test31.getObstacles())));
+		 System.out.println("Edge valid?: \n"+(CollisionDetect.furthestValidEdge(e71,test31.getObstacles())));
+			
+		 Edge e72 = CollisionDetect.furthestValidEdge(e71,test31.getObstacles());
+		 System.out.println("Edge free?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e72,test31.getObstacles())));
+					
+		 //pathfinder checking
+		 PathFinder path71 = new PathFinder(n71, n72, test31.getObstacles());
+				 
+
+		  path71.navigate();
+		  Node final71 = path71.getGoalNode();
+		  System.out.println("SecondLast: \n");
+		  System.out.println(final71.getParent());
+		  System.out.println(final71.getParent().getParent());
+		  ArrayList<Node> nodeList71 = path71.getNodeList(path71.getGoalNode(), new ArrayList<Node>());
+
+		  for (int j=0;j<nodeList71.size();j++) {
+				System.out.println(nodeList71.get(j));
+			
+		  test31.setPath(path71.finalSolution(nodeList71));
+		  test31.saveSolution("testcases//solution7ASV-x4.txt");
+			 
+		}
+		
+	}
+}
 
 	
-}
