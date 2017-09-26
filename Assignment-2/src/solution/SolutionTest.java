@@ -110,8 +110,9 @@ public class SolutionTest {
 		/*
 		 * Test for 3ASV-easy 
 		 * */
-		/*
+		
 		// Initial conf
+		/*
 		ASVConfig c31 = new ASVConfig(3, "0.150 0.225 0.150 0.275 0.200 0.275 ");	
 		//final conf
 		ASVConfig c32 = new ASVConfig(3, "0.850 0.225 0.850 0.275 0.900 0.275");
@@ -181,13 +182,14 @@ public class SolutionTest {
 		
 		//Test horizontal
 		//edge from node located in the space between obstacles and final node
-		Edge e35 =  new Edge(n34,n35);
+		Edge e35 =  new Edge(n31,n32);
 		Node middle33 = e35.middleNode();
 		
 		//check collision
 		System.out.println("Obstacles 3ASV list: \n"+test.getObstacles().toString());
 				
-		System.out.println("Collision free node?: \n"+Boolean.toString(CollisionDetect.isNodeValid(n34,test.getObstacles())));
+		System.out.println("Collision free node?: \n"+Boolean.toString(CollisionDetect.isNodeValid(middle33,test.getObstacles())));
+		System.out.println("Collision free node without obst?: \n"+Boolean.toString(CollisionDetect.isNodeConfigValid(middle33)));
 		
 		System.out.println("Middle node: "+ middle32.toString());
 		System.out.println("Edge free?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e35,test.getObstacles())));
@@ -197,7 +199,7 @@ public class SolutionTest {
 		System.out.println("Edge free with furthest edge?: \n"+Boolean.toString(CollisionDetect.isEdgeValid(e36,test.getObstacles())));
 							
 		//pathfinder checking
-		PathFinder path31 = new PathFinder(n34, n32, test.getObstacles());
+		PathFinder path31 = new PathFinder(n31, n32, test.getObstacles());
 		//Node n34 = path31.randomGaussianNode(n31, 0.01);
 		//System.out.println(n34.toString());
 				
@@ -206,8 +208,13 @@ public class SolutionTest {
 		Node fina = path31.getGoalNode();
 		System.out.println("SecondLast: \n");
 		System.out.println(fina.getParent());
-		System.out.println(fina.getParent().getParent());
-		ArrayList<Node> nodeList=path31.getNodeList(path31.getGoalNode(), new ArrayList<Node>());
+		//System.out.println(fina.getParent().getParent());
+		
+		ArrayList<Node> nodeList;
+		if (path31.getGoalNode()==null)
+			nodeList = path31.getRandomWalked();
+		else
+			nodeList = path31.getNodeList(path31.getGoalNode(), new ArrayList<Node>());
 		
 		for (int i=0;i<nodeList.size();i++) {
 			System.out.println(nodeList.get(i));
@@ -215,6 +222,8 @@ public class SolutionTest {
 		test.setPath(path31.finalSolution(nodeList));
 		test.saveSolution("testcases//solution1.txt");
 		*/
+		
+		
 		//path31.finalSolution(nodeList);
 		
 		/*
@@ -289,10 +298,13 @@ public class SolutionTest {
 			 test3.saveSolution("testcases//solution7ASV-easy.txt");
 		*/ 
 			 
+		
+		
 		/*
 		 * Test for 7 ASV - x4
 		 * */
-		 ASVConfig c71 = new ASVConfig(7, 
+		 
+		ASVConfig c71 = new ASVConfig(7, 
 						"0.193301 0.238602 0.15 0.213602 0.125 0.170301 0.150 0.127 0.200 0.127 0.225 0.170301 0.225 0.220301");	
 		 ASVConfig c72 = new ASVConfig(7, 
 						 "0.893301 0.238602 0.85 0.213602 0.825 0.170301 0.850 0.127 0.900 0.127 0.925 0.170301 0.925 0.220301");
@@ -352,7 +364,7 @@ public class SolutionTest {
 			
 		  test31.setPath(path71.finalSolution(nodeList71));
 		  test31.saveSolution("testcases//solution7ASV-x4.txt");
-			 
+		  
 		}
 		
 	}

@@ -47,6 +47,7 @@ public class CollisionDetect {
 			return false;
 		if (!test.hasEnoughArea(node.getConfigCoords()))
 			return false;
+		
 		//if (broomsCross(node))
 		//	return false;
 		return true;
@@ -133,6 +134,18 @@ public class CollisionDetect {
 			return edge;
 		return furthestValidEdge(new Edge(edge.getInit(),edge.middleNode()),obstacles);
 	}
+	
+	/*
+	public static Edge furthestValidEdge(Edge edge,List<Obstacle> obstacles) {
+		
+		while(!isEdgeValid(edge)) {
+			
+		}
+		
+		if (isEdgeValid(edge, obstacles))
+			return edge;
+		return furthestValidEdge(new Edge(edge.getInit(),edge.middleNode()),obstacles);
+	}*/
 	
 	/**
 	 * Checks if two points are on the same side of a line
