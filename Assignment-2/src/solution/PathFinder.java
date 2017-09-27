@@ -57,18 +57,20 @@ public class PathFinder {
 					if (CollisionDetect.isEdgeValid(edge, obstacles)) {
 						nextNode.setParent(prevNode);
 						dist=this.disToGoal(nextNode);
+						prevNode=nextNode.clone();
 					}
 				}
 				while (dist<=currentMin) {
 					if (nextNode!=null) {
 						nextNode.setParent(prevNode);
 						dist=this.disToGoal(nextNode);
-						if (CollisionDetect.isEdgeValid(new Edge(nextNode,this.goalNode), obstacles))
-							this.goalNode.setParent(nextNode);
 						edge = new Edge(prevNode,nextNode);
+	
 						if (dist<currentMin && CollisionDetect.isEdgeValid(edge, obstacles))
 							currentMin=dist;
 							prevNode=nextNode.clone();
+							if (CollisionDetect.isEdgeValid(new Edge(prevNode,this.goalNode), obstacles))
+								this.goalNode.setParent(nextNode);
 					}
 					
 					//double prevDist=this.disToGoal(prevNode);
@@ -99,7 +101,30 @@ public class PathFinder {
 				prevNode = root.clone();
 				randomWalking.add(prevNode);
 				double localMin=this.disToGoal(prevNode);
+				dist = localMin;
 				
+				Node dummyNode = this.randomNode(prevNode);
+				Edge connection = new Edge(prevNode,dummyNode);
+
+				
+				int counter = 0;
+				while (counter<this.maxNodesInRandWalk && dist>=localMin) {
+					dummyNode = this.randomNode(prevNode);
+					Node closeNode = this.closestNode(randomWalking, dummyNode);
+					connection = new Edge(closeNode,dummyNode);
+					if (CollisionDetect.isEdgeValid(connection, obstacles)) {
+						nextNode = connection.getEnd();
+						nextNode.setParent(closeNode);
+						this.randomWalked.add(nextNode);
+						randomWalking.add(nextNode);
+						dist = connection.getDistance();
+						prevNode = nextNode.clone();
+						if (CollisionDetect.isEdgeValid(new Edge(prevNode,this.goalNode), obstacles))
+							this.goalNode.setParent(prevNode);
+						counter++;
+					}
+				}
+				/*
 				Edge furthestEdge=CollisionDetect.furthestValidEdge(new Edge(prevNode,this.randomNode(prevNode)), obstacles);
 				nextNode = furthestEdge.getEnd();
 				nextNode.setParent(prevNode);
@@ -129,7 +154,9 @@ public class PathFinder {
 					counter++;
 				}
 				randWalks++;
+				*/
 				
+				randWalks++;
 				if (randWalks<this.maxRandWalk-1) {
 					mode=1;
 				}else {
