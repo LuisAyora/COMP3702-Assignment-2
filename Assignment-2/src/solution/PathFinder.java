@@ -15,7 +15,7 @@ public class PathFinder {
 	private int maxRandWalk = 4;
 	private int maxNodesInRandWalk=2000;
 	private int branchingFact=3;
-	private double gausVariance=0.001;
+	private double gausVariance=0.1;
 	private int MAX_ITERATIONS = 200000;
 	private ArrayList<Node> randomWalked;
 	private int RANDOM_GAUSS_LIMIT = 5;
@@ -31,7 +31,7 @@ public class PathFinder {
 	}
 	
 	public void navigate() {
-		int mode = 2;
+		int mode = 1;
 		randomWalked=new ArrayList<Node>();		
 		double currentMin=2*initNode.getConfigCoords().getASVPositions().size();
 		randomWalked.add(this.initNode);
@@ -51,9 +51,13 @@ public class PathFinder {
 				Node prevNode = head.clone();
 				Node nextNode = bestFirstStep(prevNode,this.goalNode);
 				double dist = currentMin;
+				Edge edge;
 				if (nextNode!=null) {
-					nextNode.setParent(prevNode);
-					dist=this.disToGoal(nextNode);
+					edge = new Edge(prevNode,nextNode);
+					if (CollisionDetect.isEdgeValid(edge, obstacles)) {
+						nextNode.setParent(prevNode);
+						dist=this.disToGoal(nextNode);
+					}
 				}
 				while (dist<=currentMin) {
 					if (nextNode!=null) {
@@ -61,14 +65,17 @@ public class PathFinder {
 						dist=this.disToGoal(nextNode);
 						if (CollisionDetect.isEdgeValid(new Edge(nextNode,this.goalNode), obstacles))
 							this.goalNode.setParent(nextNode);
-						if (dist<currentMin)
+						edge = new Edge(prevNode,nextNode);
+						if (dist<currentMin && CollisionDetect.isEdgeValid(edge, obstacles))
 							currentMin=dist;
 							prevNode=nextNode.clone();
 					}
+					
 					//double prevDist=this.disToGoal(prevNode);
 					nextNode = bestFirstStep(prevNode,this.goalNode);
-					nextNode.setParent(prevNode);
+					/*nextNode.setParent(prevNode);
 					dist = this.disToGoal(nextNode);
+					*/
 				}
 				if (CollisionDetect.isEdgeValid(new Edge(prevNode,this.goalNode), obstacles))
 					this.goalNode.setParent(prevNode);
@@ -122,12 +129,12 @@ public class PathFinder {
 					counter++;
 				}
 				randWalks++;
-				/*
+				
 				if (randWalks<this.maxRandWalk-1) {
 					mode=1;
 				}else {
 					mode=3;
-				}*/
+				}
 				break;
 			case 3:
 				int index=numGenerator.nextInt(randomWalked.size());
@@ -141,6 +148,8 @@ public class PathFinder {
 			System.out.println("Iterations: "+Integer.toString(iterCount));
 		}
 		System.out.println("OUT OF BIG WHILE");
+		if (this.goalNode.getParent()==null)
+			this.goalNode.setParent(popList(randomWalked));
 	}
 	
 	/**

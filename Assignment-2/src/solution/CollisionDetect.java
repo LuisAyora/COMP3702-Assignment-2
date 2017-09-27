@@ -9,7 +9,7 @@ import problem.Obstacle;
 import tester.*;
 
 public class CollisionDetect {
-	static double resolution=0.001;
+	static double resolution=0.0001;
 	static Tester test=new Tester();
 	static double angularMaxError=1e5;
 	
