@@ -8,10 +8,12 @@ import problem.Obstacle;
 public class RegionId {
 	
 	private double narrownessThreshold;
+	private double lowerThreshold;
 	private List <Rectangle2D> narrowRegions;
 	
-	public RegionId(double threshold,List<Obstacle> obsts) {
+	public RegionId(int n,double threshold,List<Obstacle> obsts) {
 		narrownessThreshold = threshold;
+		setLowerThreshold(n);
 		narrowRegions = overallNarrowRegions(obsts);
 	}
 	
@@ -66,9 +68,13 @@ public class RegionId {
 					}
 				}
 			}	
-			if (rectUp!=null && rectUp.getHeight()<narrownessThreshold)
+			if (rectUp!=null && 
+					rectUp.getHeight()<narrownessThreshold
+					&& rectUp.getHeight()>lowerThreshold)
 				regions.add(rectUp);
-			if (rectDown!=null && rectDown.getHeight()<narrownessThreshold)
+			if (rectDown!=null && 
+					rectDown.getHeight()<narrownessThreshold &&
+					rectDown.getHeight()>lowerThreshold)
 				regions.add(rectDown);
 		}
 		
@@ -126,9 +132,13 @@ public class RegionId {
 					}
 				}
 			}
-			if (rectRight!=null && rectRight.getWidth()<narrownessThreshold)
+			if (rectRight!=null && 
+					rectRight.getWidth()<narrownessThreshold && 
+					rectRight.getWidth()>lowerThreshold)
 				regions.add(rectRight);
-			if (rectLeft!=null && rectLeft.getWidth()<narrownessThreshold)
+			if (rectLeft!=null && 
+					rectLeft.getWidth()<narrownessThreshold && 
+					rectLeft.getWidth()>lowerThreshold)
 				regions.add(rectLeft);
 		}
 		
@@ -200,4 +210,32 @@ public class RegionId {
 	public List<Rectangle2D> getNarrowRegions() {
 		return this.narrowRegions;
 	}
+	
+	/**
+	 * Set the height threshold by minimising the Area of a trapezoid formed by
+	 * the ASV chain using the Newton-Raphson method.
+	 * @require that the number of ASVs is larger than or equal to 3
+	 * @ensure that the height will be an approximation of the local minimum
+	 * 		   and a positive number
+	 * @param n: the number of  ASVs in the chain
+	 */
+	private void setLowerThreshold(int n){
+		if(n >= 3) {
+			double L = 0.005; //Standard broom length
+			double theta = 15.0*(Math.PI/360.0); // Initial guess for solution
+			double Ai = (n - 3) * Math.sin(theta) + 0.5 * Math.sin(2 * theta);
+			double Ai_dash = (n - 3) * Math.cos(theta) + Math.cos(2 * theta);
+			// Iterate with Newton-Raphson until desire tolerance is achieved
+			while(Ai_dash < 0.0001) {
+				theta -= Ai/Ai_dash;
+				Ai = (n - 3) * Math.sin(theta) + 0.5 * Math.sin(2 * theta);
+				Ai_dash = (n - 3) * Math.cos(theta) + Math.cos(2 * theta);
+			}
+			// Set the height threshold
+			lowerThreshold = Math.sin(theta) * L;
+		}
+		else
+			lowerThreshold = 0;
+	}
+	
 }

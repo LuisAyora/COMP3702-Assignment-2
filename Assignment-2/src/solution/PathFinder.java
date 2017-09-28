@@ -17,7 +17,7 @@ public class PathFinder {
 	private Random numGenerator = new Random();
 	private RegionId narrowAreas;
 	private int maxRandWalk = 4;
-	private int maxNodesInRandWalk = 200;
+	private int maxNodesInRandWalk = 20;
 	private int branchingFact = 6;
 	private double gausVariance = 0.01;
 	private int MAX_ITERATIONS = 2000;
@@ -32,7 +32,7 @@ public class PathFinder {
 		goalNode=end;
 		end.setParent(null);
 		narrowThreshold = obtainNarrowThreshold();
-		narrowAreas = new RegionId(narrowThreshold,obstacles);
+		narrowAreas = new RegionId(init.getConfigCoords().getASVCount(),narrowThreshold,obstacles);
 		this.obstacles=obstacles;
 		//theQueue=new PriorityQueue();
 	}
@@ -275,8 +275,8 @@ public class PathFinder {
 						angles.add(numGenerator.nextDouble()*180+180);
 				}
 				result=new Node(x,y,angles);
-				System.out.println("Inside Nearest Rect: ");
-				System.out.println(nearestRect);
+				//System.out.println("Inside Nearest Rect: ");
+				//System.out.println(nearestRect);
 			}while(!CollisionDetect.isNodeConfigValid(result));
 			return (result);
 		}else {
@@ -410,9 +410,9 @@ public class PathFinder {
 		ArrayList<Node> nodeList = new ArrayList<Node>();
 		Node end = last.clone();
 		nodeList.add(end);
-		while (end.getParent()!=null) {
+		while (end!=null){
 			nodeList.add(end.getParent());
-			end = end.getParent().clone();
+			end = end.getParent();
 		}
 		return nodeList;
 	}

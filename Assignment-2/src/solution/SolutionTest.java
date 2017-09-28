@@ -9,9 +9,9 @@ public class SolutionTest {
 	// Dummy test method - Delete this
 	public static void main(String[] args) throws IOException{
 		ProblemSpec problemData = new ProblemSpec();
-		String directory="testcases//";
-		String fileName="7ASV.txt";
-		
+		String directory="testcases//extraTests//";
+		String fileName="15.txt";
+	
 		
 		String address=directory+fileName;
 		problemData.loadProblem(address);

@@ -609,9 +609,9 @@ public class Tester {
 	 */
 	public static void main(String[] args) {
 		double maxError = DEFAULT_MAX_ERROR;
-		boolean verbose = false;
-		String problemPath = null;
-		String solutionPath = null;
+		boolean verbose = true;
+		String problemPath = "testcases//extraTests//14.txt";
+		String solutionPath = "testcases//extraTests//Solution-14.txt";
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i].trim();
 			if (arg.equals("-e")) {
