@@ -9,6 +9,7 @@ public class RegionId {
 	
 	private double narrownessThreshold;
 	private List <Rectangle2D> narrowRegions;
+	private double heightThreshold;
 	
 	public RegionId(double threshold,List<Obstacle> obsts) {
 		narrownessThreshold = threshold;
@@ -199,5 +200,36 @@ public class RegionId {
 	 */
 	public List<Rectangle2D> getNarrowRegions() {
 		return this.narrowRegions;
+	}
+	
+	public double getHeightThreshold() {
+		return heightThreshold;
+	}
+	
+	/**
+	 * Set the height threshold by minimising the Area of a trapezoid formed by
+	 * the ASV chain using the Newton-Raphson method.
+	 * @require that the number of ASVs is larger than or equal to 3
+	 * @ensure that the height will be an approximation of the local minimum
+	 * 		   and a positive number
+	 * @param n: the number of  ASVs in the chain
+	 */
+	public void setHeightThreshold(int n) throws IllegalArgumentException{
+		if(n >= 3) {
+			double L = 0.005; //Standard broom length
+			double theta = 15.0*(Math.PI/360.0); // Initial guess for solution
+			double Ai = (n - 3) * Math.sin(theta) + 0.5 * Math.sin(2 * theta);
+			double Ai_dash = (n - 3) * Math.cos(theta) + Math.cos(2 * theta);
+			// Iterate with Newton-Raphson until desire tolerance is achieved
+			while(Ai_dash < 0.0001) {
+				theta -= Ai/Ai_dash;
+				Ai = (n - 3) * Math.sin(theta) + 0.5 * Math.sin(2 * theta);
+				Ai_dash = (n - 3) * Math.cos(theta) + Math.cos(2 * theta);
+			}
+			// Set the height threshold
+			heightThreshold = Math.sin(theta) * L;
+		}
+		else
+			throw new IllegalArgumentException("Minimum # of ASVs must be 3");
 	}
 }
