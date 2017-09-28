@@ -29,8 +29,14 @@ public class ASVAngle {
 	 */
 	public ASVAngle(ASVConfig config) {
 		this.config = config;
+		if(config.getASVCount() == 1){
+			alphaAngles = new ArrayList<Double>();
+			thetaAngles = new ArrayList<Double>();
+		}
+		else {
 		alphaAngles = calculateAlphaAngles(this.config.getASVPositions());
 		thetaAngles = calculateThetaAngles(alphaAngles);
+		}
 	}
 	
 	// Queries
@@ -113,41 +119,5 @@ public class ASVAngle {
 			}
 		}
 		return angles;
-	}
-	
-	// Dummy test method - Delete this
-	public static void main(String[] args) {
-		// Generate a simple ASVConfig object
-		ASVConfig config = new ASVConfig(7, 
-				"0.193301 0.238602 0.15 0.213602 0.125 0.170301 0.150 0.127 "
-				+ "0.200 0.127 0.225 0.170301 0.225 0.220301");
-		System.out.println(config.toString());
-		
-		// Generate a simple ASVAngles object
-		ASVAngle angles = new ASVAngle(config);
-		
-		// Display the configuration, alpha and theta angles
-		System.out.println(angles.getConfig().toString());
-		System.out.println(angles.getAlphaAngles());
-		System.out.println(angles.getThetaAngles());
-		
-		
-		Node a=new Node(config.getASVPositions().get(0).getX(),config.getASVPositions().get(0).getY(),
-				angles.getThetaAngles());
-		
-		System.out.println("Output: ");
-		System.out.println(a.getConfigCoords().toString());
-		
-		// Test the commands - Should I merge both into the one command?
-		angles.updateStatus(new ASVConfig(7, 
-				"0.893301 0.238602 0.85 0.213602 0.825 0.170301 0.850 "
-				+ "0.127 0.900 0.127 0.925 0.170301 0.925 0.220301"));
-		
-		// Display the results of using the commands
-		System.out.println(angles.getConfig().toString());
-		System.out.println(angles.getAlphaAngles());
-		System.out.println(angles.getThetaAngles());
-		
-		
 	}
 }
