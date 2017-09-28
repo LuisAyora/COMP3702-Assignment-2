@@ -7,6 +7,7 @@ import problem.ASVConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
+import java.awt.geom.Rectangle2D;
 
 public class PathFinder {
 	private Node initNode;
@@ -14,22 +15,24 @@ public class PathFinder {
 	private List<Obstacle> obstacles;
 	private ArrayList<Node> randomWalked;
 	private Random numGenerator = new Random();
-	private RegionId narrowRegions;
+	private RegionId narrowAreas;
 	private int maxRandWalk = 4;
 	private int maxNodesInRandWalk = 200;
 	private int branchingFact = 6;
 	private double gausVariance = 0.01;
-	private int MAX_ITERATIONS = 10000;
+	private int MAX_ITERATIONS = 2000;
 	private int RANDOM_GAUSS_LIMIT = 5;
-	private double NARROW_THRESHOLD = 0.05;
-	private double PROB_IN_NARROW = 0.5;
+	private double narrowThreshold;
+	private double PROB_IN_NARROW = 0.7;
+	private double BROOM_LENGTH = 0.05;
 	
 	public PathFinder(Node init,Node end,List<Obstacle> obstacles) {
 		initNode=init;
 		init.setParent(null);
 		goalNode=end;
 		end.setParent(null);
-		narrowRegions = new RegionId(NARROW_THRESHOLD,obstacles);
+		narrowThreshold = obtainNarrowThreshold();
+		narrowAreas = new RegionId(narrowThreshold,obstacles);
 		this.obstacles=obstacles;
 		//theQueue=new PriorityQueue();
 	}
@@ -256,21 +259,59 @@ public class PathFinder {
 	private Node randomNode(Node node) {
 		ArrayList<Double> angles;
 		Node result;
-		do{
-			angles =new ArrayList<Double>();
-			boolean convexity=nodeConvexity(node);
-			double x=numGenerator.nextDouble();
-			double y=numGenerator.nextDouble();
-			angles.add(numGenerator.nextDouble()*360);
-			for (int i=1;i<node.getTheta().size();i++) {
-				if (convexity)
-					angles.add(numGenerator.nextDouble()*180);
-				else
-					angles.add(numGenerator.nextDouble()*180+180);
+		double decision = this.numGenerator.nextDouble();
+		Rectangle2D nearestRect = this.nearestNarrowRegion(node);
+		if (decision<this.PROB_IN_NARROW && nearestRect!=null) {
+			do{
+				angles =new ArrayList<Double>();
+				boolean convexity=nodeConvexity(node);
+				double x=numGenerator.nextDouble()*nearestRect.getWidth()+nearestRect.getMinX();
+				double y=numGenerator.nextDouble()*nearestRect.getHeight()+nearestRect.getMinY();
+				angles.add(numGenerator.nextDouble()*360);
+				for (int i=1;i<node.getTheta().size();i++) {
+					if (convexity)
+						angles.add(numGenerator.nextDouble()*180);
+					else
+						angles.add(numGenerator.nextDouble()*180+180);
+				}
+				result=new Node(x,y,angles);
+				System.out.println("Inside Nearest Rect: ");
+				System.out.println(nearestRect);
+			}while(!CollisionDetect.isNodeConfigValid(result));
+			return (result);
+		}else {
+			do{
+				angles =new ArrayList<Double>();
+				boolean convexity=nodeConvexity(node);
+				double x=numGenerator.nextDouble();
+				double y=numGenerator.nextDouble();
+				angles.add(numGenerator.nextDouble()*360);
+				for (int i=1;i<node.getTheta().size();i++) {
+					if (convexity)
+						angles.add(numGenerator.nextDouble()*180);
+					else
+						angles.add(numGenerator.nextDouble()*180+180);
+				}
+				result=new Node(x,y,angles);
+				//System.out.println("Inside "+Integer.toString(count));
+			}while(!CollisionDetect.isNodeConfigValid(result));
+			return (result);
+		}
+	}
+	
+	private Rectangle2D nearestNarrowRegion(Node prevNode) {
+		Rectangle2D rect = null;
+		double minDist = 2;
+		for (int i=0;i<this.narrowAreas.getNarrowRegions().size();i++) {
+			double xNarrow = this.narrowAreas.getNarrowRegions().get(i).getCenterX();
+			double yNarrow = this.narrowAreas.getNarrowRegions().get(i).getCenterY();
+			double dist = prevNode.getLocation().distanceSq(xNarrow, yNarrow);
+			if (dist<minDist) {
+				minDist = dist;
+				rect = this.narrowAreas.getNarrowRegions().get(i);
 			}
-			result=new Node(x,y,angles);
-		}while(!CollisionDetect.isNodeConfigValid(result));
-		return (result);
+		}
+		return rect;
 	}
 	
 	/**
@@ -423,4 +464,14 @@ public class PathFinder {
 		}
 		return theList;
 	}
+	
+	/**
+	 * Obtains Narrow passage threshold based on regular polygon diameter
+	 * @return double
+	 */
+	private double obtainNarrowThreshold() {
+		int sides = this.initNode.getConfigCoords().getASVCount()-1;
+		return (BROOM_LENGTH/Math.sin(Math.PI/sides));
+	}
+	
 }

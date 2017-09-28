@@ -29,12 +29,12 @@ public class RegionId {
 		obstWithBounds.add(new Obstacle("0.0 1.0 1.0 1.0 1.0 1.01 0.0 1.01"));
 		obstWithBounds.add(new Obstacle("-0.01 0.0 0.0 0.0 0.0 1.0 -0.01 1.0"));
 		
-		for (int i=0;i<obstacles.size()-1;i++) {
+		for (int i=0;i<obstacles.size();i++) {
 			Rectangle2D rectUp = null;
 			Rectangle2D rectDown = null;
 			double minDistUp = 1;
 			double minDistDown = 1;
-			for (int j=i;j<obstWithBounds.size()-1;j++) {
+			for (int j=i+1;j<obstWithBounds.size();j++) {
 				if (intersectX(obstacles.get(i),obstWithBounds.get(j)) && 
 						!intersectY(obstacles.get(i),obstWithBounds.get(j))) {
 					//Obstacles on top of current obstacle
@@ -65,11 +65,11 @@ public class RegionId {
 							
 					}
 				}
-				if (rectUp!=null && rectUp.getHeight()<narrownessThreshold)
-					regions.add(rectUp);
-				if (rectDown!=null && rectDown.getHeight()<narrownessThreshold)
-					regions.add(rectDown);
-			}				
+			}	
+			if (rectUp!=null && rectUp.getHeight()<narrownessThreshold)
+				regions.add(rectUp);
+			if (rectDown!=null && rectDown.getHeight()<narrownessThreshold)
+				regions.add(rectDown);
 		}
 		
 		return regions;
@@ -89,12 +89,12 @@ public class RegionId {
 		obstWithBounds.add(new Obstacle("0.0 1.0 1.0 1.0 1.0 1.01 0.0 1.01"));
 		obstWithBounds.add(new Obstacle("-0.01 0.0 0.0 0.0 0.0 1.0 -0.01 1.0"));
 		
-		for (int i=0;i<obstacles.size()-1;i++) {
+		for (int i=0;i<obstacles.size();i++) {
 			Rectangle2D rectRight = null;
 			Rectangle2D rectLeft = null;
 			double minDistRight = 1;
 			double minDistLeft = 1;
-			for (int j=i;j<obstWithBounds.size()-1;j++) {
+			for (int j=i+1;j<obstWithBounds.size();j++) {
 				if (intersectY(obstacles.get(i),obstWithBounds.get(j)) && 
 						!intersectX(obstacles.get(i),obstWithBounds.get(j))) {
 					//Obstacles on the right of current obstacle
@@ -125,11 +125,11 @@ public class RegionId {
 							
 					}
 				}
-				if (rectRight!=null && rectRight.getWidth()<narrownessThreshold)
-					regions.add(rectRight);
-				if (rectLeft!=null && rectLeft.getWidth()<narrownessThreshold)
-					regions.add(rectLeft);
-			}				
+			}
+			if (rectRight!=null && rectRight.getWidth()<narrownessThreshold)
+				regions.add(rectRight);
+			if (rectLeft!=null && rectLeft.getWidth()<narrownessThreshold)
+				regions.add(rectLeft);
 		}
 		
 		return regions;
