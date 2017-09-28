@@ -12,20 +12,24 @@ public class PathFinder {
 	private Node initNode;
 	private Node goalNode;
 	private List<Obstacle> obstacles;
-	private int maxRandWalk = 4;
-	private int maxNodesInRandWalk=2000;
-	private int branchingFact=3;
-	private double gausVariance=0.1;
-	private int MAX_ITERATIONS = 200000;
 	private ArrayList<Node> randomWalked;
+	private Random numGenerator = new Random();
+	private RegionId narrowRegions;
+	private int maxRandWalk = 4;
+	private int maxNodesInRandWalk = 200;
+	private int branchingFact = 6;
+	private double gausVariance = 0.01;
+	private int MAX_ITERATIONS = 10000;
 	private int RANDOM_GAUSS_LIMIT = 5;
-	private Random numGenerator=new Random();
+	private double NARROW_THRESHOLD = 0.05;
+	private double PROB_IN_NARROW = 0.5;
 	
 	public PathFinder(Node init,Node end,List<Obstacle> obstacles) {
 		initNode=init;
 		init.setParent(null);
 		goalNode=end;
 		end.setParent(null);
+		narrowRegions = new RegionId(NARROW_THRESHOLD,obstacles);
 		this.obstacles=obstacles;
 		//theQueue=new PriorityQueue();
 	}
@@ -112,6 +116,7 @@ public class PathFinder {
 					dummyNode = this.randomNode(prevNode);
 					Node closeNode = this.closestNode(randomWalking, dummyNode);
 					connection = new Edge(closeNode,dummyNode);
+					//Checks if can connect randomNode the closest node in the RRT
 					if (CollisionDetect.isEdgeValid(connection, obstacles)) {
 						nextNode = connection.getEnd();
 						nextNode.setParent(closeNode);
@@ -119,6 +124,7 @@ public class PathFinder {
 						randomWalking.add(nextNode);
 						dist = connection.getDistance();
 						prevNode = nextNode.clone();
+						//Checks if can reach goalNode
 						if (CollisionDetect.isEdgeValid(new Edge(prevNode,this.goalNode), obstacles))
 							this.goalNode.setParent(prevNode);
 						counter++;
@@ -377,5 +383,44 @@ public class PathFinder {
 			finalPath.add(nd.getConfigCoords());
 		}
 		return finalPath;
+	}
+	
+	/**
+	 * Return a list of the transition Nodes between two arbitrary Nodes.
+	 * @param nodeA
+	 * @param nodeB
+	 * @return
+	 */
+	private ArrayList<Node> smoothPath(Node nodeA, Node nodeB) { 
+		Edge edge = new Edge(nodeA, nodeB);
+		Node inter = edge.middleNode();
+		ArrayList<Node> smooth = new ArrayList<Node>();
+		if(edge.getDistance() <= 0.001) {
+			ArrayList<Node> fin = new ArrayList<Node>();
+			fin.add(nodeA);
+			fin.add(nodeB);
+			smooth.addAll(fin);
+			return smooth;
+		}
+		else
+			return nodeListUnion(smoothPath(nodeA, inter), 
+					smoothPath(inter, nodeB));
+	}
+	
+	private ArrayList<Node> nodeListUnion(ArrayList<Node> a, 
+			ArrayList<Node> b) {
+		ArrayList<Node> union = new ArrayList<Node>();
+		union.addAll(a);
+		union.addAll(b);
+		return union;
+		
+	}
+	
+	public ArrayList<Node> completePath(ArrayList<Node> nodeList) {
+		ArrayList<Node> theList = new ArrayList<Node>();
+		for (int i=0;i<nodeList.size()-2;i++) {
+			theList.addAll(smoothPath(nodeList.get(i),nodeList.get(i+1)));
+		}
+		return theList;
 	}
 }

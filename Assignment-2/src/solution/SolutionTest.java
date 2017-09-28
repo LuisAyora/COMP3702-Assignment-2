@@ -10,7 +10,7 @@ public class SolutionTest {
 	public static void main(String[] args) throws IOException{
 		ProblemSpec problemData = new ProblemSpec();
 		String directory="testcases//";
-		String fileName="3ASV.txt";
+		String fileName="7-ASV-x4.txt";
 		
 		
 		String address=directory+fileName;
@@ -29,10 +29,10 @@ public class SolutionTest {
 		pathFinder.navigate();
 		ArrayList<Node> solPath=pathFinder.getNodeList(pathFinder.getGoalNode());
 		
-		problemData.setPath(pathFinder.finalSolution(solPath));
-		problemData.saveSolution("testcases//"+"Solution-"+fileName);			
-
-	}
+		problemData.setPath(pathFinder.finalSolution(pathFinder.completePath(solPath)));
+		
+		problemData.saveSolution(directory+"Solution-"+fileName);			
+	} 
 }
 
 	
