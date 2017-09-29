@@ -610,8 +610,8 @@ public class Tester {
 	public static void main(String[] args) {
 		double maxError = DEFAULT_MAX_ERROR;
 		boolean verbose = true;
-		String problemPath = "testcases//3ASV.txt";
-		String solutionPath = "testcases//Solution-3ASV.txt";
+		String problemPath = "testcases//7-ASV-x6.txt";
+		String solutionPath = "testcases//Solution-7-ASV-x6.txt";
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i].trim();
 			if (arg.equals("-e")) {

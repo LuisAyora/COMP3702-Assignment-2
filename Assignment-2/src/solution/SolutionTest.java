@@ -10,7 +10,7 @@ public class SolutionTest {
 	public static void main(String[] args) throws IOException{
 		ProblemSpec problemData = new ProblemSpec();
 		String directory="testcases//";
-		String fileName="3ASV.txt";
+		String fileName="7-ASV-x2.txt";
 		
 		long time = System.currentTimeMillis();
 		
@@ -31,10 +31,10 @@ public class SolutionTest {
 		ArrayList<Node> solPath=pathFinder.getNodeList(pathFinder.getGoalNode());
 		
 		problemData.setPath(pathFinder.finalSolution(pathFinder.completePath(solPath)));
-		System.out.println("Time taken: " +Double.toString((System.currentTimeMillis()-time)/1000)+" s");
+		System.out.println("Time runing Algorithm: " +Double.toString((System.currentTimeMillis()-time)/1000)+" s");
 		System.out.println("Saving File, Please wait");
 		problemData.saveSolution(directory+"Solution-"+fileName);
-		System.out.println("File Saved");
+		System.out.println("File Saved :)");
 		System.out.println("Time Including saving: " +Double.toString((System.currentTimeMillis()-time)/1000)+" s");
 	} 
 }

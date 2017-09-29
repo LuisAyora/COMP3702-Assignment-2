@@ -110,12 +110,14 @@ public class PathFinder {
 				double localMin=this.disToGoal(prevNode);
 				dist = localMin;
 				
-				Node dummyNode = this.randomNode(prevNode);
-				Edge connection = new Edge(prevNode,dummyNode);
-
+				RandomQuery randQuery;
+				Node dummyNode;
+				Edge connection;
+				
 				int counter = 0;
 				while (counter<this.maxNodesInRandWalk && dist>=localMin) {
-					dummyNode = this.randomNode(prevNode);
+					randQuery = randomNode(prevNode);
+					dummyNode = randQuery.getNode();
 					Node closeNode = this.closestNode(randomWalking, dummyNode);
 					connection = new Edge(closeNode,dummyNode);
 					//Checks if can connect randomNode the closest node in the RRT
@@ -129,6 +131,10 @@ public class PathFinder {
 						//Checks if can reach goalNode
 						if (CollisionDetect.isEdgeValid(new Edge(prevNode,this.goalNode), obstacles))
 							this.goalNode.setParent(prevNode);
+						if (randQuery.isNarrowPassage()){
+							mode = 1;
+							break;
+						}
 						counter++;
 					}
 				}
@@ -163,9 +169,9 @@ public class PathFinder {
 				}
 				randWalks++;
 				*/
-				
+				currentMin=2*initNode.getConfigCoords().getASVPositions().size();
 				randWalks++;
-				if (randWalks<this.maxRandWalk-1) {
+				if (randWalks<this.maxRandWalk) {
 					mode=1;
 				}else {
 					mode=3;
@@ -183,7 +189,7 @@ public class PathFinder {
 			if (iterCount%100 == 0)
 				System.out.println("Iterations: "+Integer.toString(iterCount));
 		}
-		System.out.println("OUT OF BIG WHILE");
+		System.out.println("Finished Algorithm");
 		if (this.goalNode.getParent()==null)
 			this.goalNode.setParent(popList(randomWalked));
 	}
@@ -256,7 +262,7 @@ public class PathFinder {
 	 * @param node
 	 * @return Node
 	 */
-	private Node randomNode(Node node) {
+	private RandomQuery randomNode(Node node) {
 		ArrayList<Double> angles;
 		Node result;
 		double decision = this.numGenerator.nextDouble();
@@ -270,15 +276,15 @@ public class PathFinder {
 				angles.add(numGenerator.nextDouble()*360);
 				for (int i=1;i<node.getTheta().size();i++) {
 					if (convexity)
-						angles.add(truncatedGaussian()*180);
+						angles.add(truncatedGaussian()*180/4);
 					else
-						angles.add((1-truncatedGaussian())*180+180);
+						angles.add((1-truncatedGaussian()/4)*180+180);
 				}
 				result=new Node(x,y,angles);
 				//System.out.println("Inside Nearest Rect: ");
 				//System.out.println(nearestRect);
 			}while(!CollisionDetect.isNodeConfigValid(result));
-			return (result);
+			return (new RandomQuery(result,true));
 		}else {
 			do{
 				angles =new ArrayList<Double>();
@@ -295,7 +301,7 @@ public class PathFinder {
 				result=new Node(x,y,angles);
 				//System.out.println("Inside "+Integer.toString(count));
 			}while(!CollisionDetect.isNodeConfigValid(result));
-			return (result);
+			return (new RandomQuery(result,false));
 		}
 	}
 	
