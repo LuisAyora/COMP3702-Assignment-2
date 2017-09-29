@@ -131,10 +131,10 @@ public class PathFinder {
 						//Checks if can reach goalNode
 						if (CollisionDetect.isEdgeValid(new Edge(prevNode,this.goalNode), obstacles))
 							this.goalNode.setParent(prevNode);
-						if (randQuery.isNarrowPassage()){
+						/*if (randQuery.isNarrowPassage()){
 							mode = 1;
 							break;
-						}
+						}*/
 						counter++;
 					}
 				}
@@ -273,12 +273,16 @@ public class PathFinder {
 				boolean convexity=nodeConvexity(node);
 				double x=numGenerator.nextDouble()*nearestRect.getWidth()+nearestRect.getMinX();
 				double y=numGenerator.nextDouble()*nearestRect.getHeight()+nearestRect.getMinY();
-				angles.add(numGenerator.nextDouble()*360);
+				
+				//angles.add(numGenerator.nextDouble()*360);
+				angles.add(truncatedGaussian()*20+180);
+				
+				
 				for (int i=1;i<node.getTheta().size();i++) {
 					if (convexity)
-						angles.add(truncatedGaussian()*180/4);
+						angles.add(truncatedPosGaussian()*180/4);
 					else
-						angles.add((1-truncatedGaussian()/4)*180+180);
+						angles.add((1-truncatedPosGaussian()/4)*180+180);
 				}
 				result=new Node(x,y,angles);
 				//System.out.println("Inside Nearest Rect: ");
@@ -485,11 +489,24 @@ public class PathFinder {
 	 * random value
 	 * @return double
 	 */
-	private double truncatedGaussian() {
+	private double truncatedPosGaussian() {
 		double gaus = numGenerator.nextGaussian();
 		gaus = Math.abs(gaus);
 		if (gaus>2)
 			gaus = 2;
+		return gaus/2;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private double truncatedGaussian() {
+		double gaus = numGenerator.nextGaussian();
+		if (gaus>2)
+			gaus = 2;
+		else if (gaus<-2)
+			gaus = -2;
 		return gaus/2;
 	}
 }
