@@ -275,8 +275,28 @@ public class PathFinder {
 				double y=numGenerator.nextDouble()*nearestRect.getHeight()+nearestRect.getMinY();
 				
 				//angles.add(numGenerator.nextDouble()*360);
-				angles.add(truncatedGaussian()*20+180);
-				
+				//angles.add(truncatedGaussian()*20+180);
+					
+				// Vertically narrow passages
+				if (nearestRect.getHeight()<narrowThreshold){
+					double side = this.numGenerator.nextDouble();
+					if (side<0.5){
+						angles.add(truncatedGaussian()*20+180);
+					}else {
+						double angToAdd = truncatedGaussian()*20;
+						if (angToAdd<0)
+							angToAdd +=360;
+						angles.add(angToAdd);
+					}
+				// Horizontally narrow passage	
+				}else {
+					double side = this.numGenerator.nextDouble();
+					if (side<0.5){
+						angles.add(truncatedGaussian()*20+90);
+					}else{
+						angles.add(truncatedGaussian()*20+270);
+					}
+				}
 				
 				for (int i=1;i<node.getTheta().size();i++) {
 					if (convexity)

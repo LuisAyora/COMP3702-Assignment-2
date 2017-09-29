@@ -9,8 +9,8 @@ public class SolutionTest {
 	// Dummy test method - Delete this
 	public static void main(String[] args) throws IOException{
 		ProblemSpec problemData = new ProblemSpec();
-		String directory="testcases//extraTests//";
-		String fileName="12.txt";
+		String directory="testcases//";
+		String fileName="7-ASV-x4.txt";
 		
 		long time = System.currentTimeMillis();
 		
