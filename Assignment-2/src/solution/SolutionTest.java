@@ -10,7 +10,7 @@ public class SolutionTest {
 	public static void main(String[] args) throws IOException{
 		ProblemSpec problemData = new ProblemSpec();
 		String directory="testcases//";
-		String fileName="7-ASV-x4.txt";
+		String fileName="3ASV-x4.txt";
 		
 		
 		String address=directory+fileName;
