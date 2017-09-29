@@ -17,10 +17,10 @@ public class PathFinder {
 	private Random numGenerator = new Random();
 	private RegionId narrowAreas;
 	private int maxRandWalk = 4;
-	private int maxNodesInRandWalk = 20;
+	private int maxNodesInRandWalk = 200;
 	private int branchingFact = 6;
 	private double gausVariance = 0.01;
-	private int MAX_ITERATIONS = 2000;
+	private int MAX_ITERATIONS = 20000;
 	private int RANDOM_GAUSS_LIMIT = 5;
 	private double narrowThreshold;
 	private double PROB_IN_NARROW = 0.7;
@@ -113,7 +113,6 @@ public class PathFinder {
 				Node dummyNode = this.randomNode(prevNode);
 				Edge connection = new Edge(prevNode,dummyNode);
 
-				
 				int counter = 0;
 				while (counter<this.maxNodesInRandWalk && dist>=localMin) {
 					dummyNode = this.randomNode(prevNode);
@@ -181,7 +180,8 @@ public class PathFinder {
 				break;
 			}
 			iterCount++;
-			System.out.println("Iterations: "+Integer.toString(iterCount));
+			if (iterCount%100 == 0)
+				System.out.println("Iterations: "+Integer.toString(iterCount));
 		}
 		System.out.println("OUT OF BIG WHILE");
 		if (this.goalNode.getParent()==null)
@@ -270,9 +270,9 @@ public class PathFinder {
 				angles.add(numGenerator.nextDouble()*360);
 				for (int i=1;i<node.getTheta().size();i++) {
 					if (convexity)
-						angles.add(numGenerator.nextDouble()*180);
+						angles.add(truncatedGaussian()*180);
 					else
-						angles.add(numGenerator.nextDouble()*180+180);
+						angles.add((1-truncatedGaussian())*180+180);
 				}
 				result=new Node(x,y,angles);
 				//System.out.println("Inside Nearest Rect: ");
@@ -474,4 +474,16 @@ public class PathFinder {
 		return (BROOM_LENGTH/Math.sin(Math.PI/sides));
 	}
 	
+	/**
+	 * Returns a right sided positive truncated at 2stdv
+	 * random value
+	 * @return double
+	 */
+	private double truncatedGaussian() {
+		double gaus = numGenerator.nextGaussian();
+		gaus = Math.abs(gaus);
+		if (gaus>2)
+			gaus = 2;
+		return gaus/2;
+	}
 }

@@ -9,9 +9,10 @@ public class SolutionTest {
 	// Dummy test method - Delete this
 	public static void main(String[] args) throws IOException{
 		ProblemSpec problemData = new ProblemSpec();
-		String directory="testcases//extraTests//";
-		String fileName="15.txt";
-	
+		String directory="testcases//";
+		String fileName="3ASV.txt";
+		
+		long time = System.currentTimeMillis();
 		
 		String address=directory+fileName;
 		problemData.loadProblem(address);
@@ -30,8 +31,11 @@ public class SolutionTest {
 		ArrayList<Node> solPath=pathFinder.getNodeList(pathFinder.getGoalNode());
 		
 		problemData.setPath(pathFinder.finalSolution(pathFinder.completePath(solPath)));
-		
-		problemData.saveSolution(directory+"Solution-"+fileName);			
+		System.out.println("Time taken: " +Double.toString((System.currentTimeMillis()-time)/1000)+" s");
+		System.out.println("Saving File, Please wait");
+		problemData.saveSolution(directory+"Solution-"+fileName);
+		System.out.println("File Saved");
+		System.out.println("Time Including saving: " +Double.toString((System.currentTimeMillis()-time)/1000)+" s");
 	} 
 }
 
